@@ -28,9 +28,13 @@ RUN useradd -m git
 ADD ./nginx/git.conf /etc/nginx/sites-enabled/git.conf
 
 #Create gitmask folder structure & set as volumes
-RUN mkdir -p /srv/gitmask/ && \
-	chown -R git:www-data /srv/gitmask/ && \
+RUN mkdir -p /srv/gitmask/
+
+RUN chown -R git:www-data /srv/gitmask/ && \
 	chmod -R g+ws /srv/gitmask/
+ADD ./git/post-receive.hook /srv/gitmask/post-receive.hook
+ADD ./start.sh /srv/gitmask/start.sh
+RUN chmod +x /srv/gitmask/start.sh
 
 #TEMPORARY - create the repository folder
 RUN mkdir -p /srv/gitmask/username/repo.git
@@ -38,8 +42,8 @@ RUN cd /srv/gitmask/username/repo.git && \
 	git init --bare && \
 	git config http.receivepack true && \
 	git config core.sharedRepository true
-ADD ./git/post-receive.hook /srv/gitmask/username/repo.git/hooks/post-receive
-RUN cd /srv/gitmask/username/repo.git/hooks/ && chmod +x post-receive
+RUN cp /srv/gitmask/post-receive.hook /srv/gitmask/username/repo.git/hooks/post-receive && \
+    chmod +x  /srv/gitmask/username/repo.git/hooks/post-receive
 RUN chown -R git:www-data /srv/gitmask && chmod -R g+ws /srv/gitmask
 
 VOLUME ["/srv/gitmask"]
@@ -47,7 +51,7 @@ VOLUME ["/srv/gitmask"]
 EXPOSE 8080
 EXPOSE 943
 
-CMD ["bash"]
+CMD ["/srv/gitmask/start.sh"]
 #service fcgiwrap start
 #nginx -g "daemon off;"
 #CMD ["nginx", "-g", "daemon off;"]
