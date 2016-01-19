@@ -37,14 +37,34 @@ if not os.path.isdir(repopath):
         os.chmod(root, st.st_mode | stat.S_IRGRP | stat.S_IWGRP | stat.S_ISGID)
 
 
+httpbackendcmd = ["/usr/lib/git-core/git-http-backend"]
 
-print("Content-type:text/html\r\n")
-print("<html><head>")
-print("<title>test</title>")
-print('<meta name="description" content="test">')
-print('<meta name="keywords" content="test">')
-print('<meta http-equiv="Content-type" content="text/html;charset=UTF-8">')
-print('<meta name="ROBOTS" content="noindex">')
-print("</head><body><pre>")
-print os.environ
-print("</pre></body></html>")
+childenv = {'PATH_INFO': os.environ['PATH_INFO'],
+            'GIT_HTTP_EXPORT_ALL': '',
+            'GIT_PROJECT_ROOT': os.environ['GIT_PROJECT_ROOT'],
+            'REMOTE_USER': 'anonymous',
+            'REMOTE_ADDR': 'gitmask.com',
+            'CONTENT_TYPE': os.environ['CONTENT_TYPE'],
+            'QUERY_STRING': os.environ['QUERY_STRING'],
+            'REQUEST_METHOD': os.environ['REQUEST_METHOD'],
+            }
+
+process = subprocess.Popen(httpbackendcmd, shell=False,
+                           #stdout=subprocess.STDOUT,
+                           #stderr=subprocess.STDERR,
+                           env=childenv)
+
+# wait for the process to terminate
+out, err = process.communicate()
+errcode = process.returncode
+
+# print("Content-type:text/html\r\n")
+# print("<html><head>")
+# print("<title>test</title>")
+# print('<meta name="description" content="test">')
+# print('<meta name="keywords" content="test">')
+# print('<meta http-equiv="Content-type" content="text/html;charset=UTF-8">')
+# print('<meta name="ROBOTS" content="noindex">')
+# print("</head><body><pre>")
+# print os.environ
+# print("</pre></body></html>")
