@@ -8,3 +8,4 @@
 - https://git-scm.com/docs/git-http-backend
 - https://apuntesderootblog.wordpress.com/2015/06/01/how-to-run-gitweb-and-git-http-backend-with-nginx-in-fedora/
 - https://help.github.com/articles/changing-author-info/
+- https://help.github.com/articles/pushing-to-a-remote/

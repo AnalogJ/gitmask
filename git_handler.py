@@ -47,6 +47,7 @@ childenv = {'PATH_INFO': os.environ['PATH_INFO'],
             'CONTENT_TYPE': os.environ['CONTENT_TYPE'],
             'QUERY_STRING': os.environ['QUERY_STRING'],
             'REQUEST_METHOD': os.environ['REQUEST_METHOD'],
+            'GITHUB_DEST_REPO': username + '/' + reponame
             }
 
 process = subprocess.Popen(httpbackendcmd, shell=False,

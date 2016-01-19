@@ -21,9 +21,9 @@ RUN \
   cd .. && \
   rm -rf luarocks-2.2.0
 
-# Setup git user permissions
-# RUN useradd -m git
-# RUN usermod -a -G www-data git
+# Install pip
+RUN curl --silent --show-error --retry 5 https://bootstrap.pypa.io/get-pip.py | sudo python2.7
+
 
 # Copy nginx conf file
 ADD ./nginx/git.conf /etc/nginx/sites-enabled/git.conf
@@ -33,7 +33,7 @@ RUN mkdir -p /srv/gitmask/
 
 RUN chown -R www-data:www-data /srv/gitmask/ && \
 	chmod -R g+ws /srv/gitmask/
-ADD ./git/post-receive.hook /srv/gitmask/post-receive.hook
+ADD ./git/post-receive.py /srv/gitmask/post-receive.py
 ADD ./start.sh /srv/gitmask/start.sh
 ADD ./git_handler.py /srv/gitmask/git_handler.py
 RUN chmod +x /srv/gitmask/start.sh && \
@@ -45,7 +45,7 @@ RUN cd /srv/gitmask/username/repo.git && \
 	git init --bare && \
 	git config http.receivepack true && \
 	git config core.sharedRepository true
-RUN cp /srv/gitmask/post-receive.hook /srv/gitmask/username/repo.git/hooks/post-receive && \
+RUN cp /srv/gitmask/post-receive.py /srv/gitmask/username/repo.git/hooks/post-receive && \
     chmod +x  /srv/gitmask/username/repo.git/hooks/post-receive
 RUN chown -R www-data:www-data /srv/gitmask && chmod -R g+ws /srv/gitmask
 

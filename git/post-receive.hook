@@ -1,5 +1,0 @@
-echo "Hook is running..."
-#chmod -Rf u+w /srv/gitmask/username/repo.git/objects
-
-#TODO: change the commiter email and name here
-#https://help.github.com/articles/changing-author-info/
