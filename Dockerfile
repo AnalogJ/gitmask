@@ -25,7 +25,7 @@ RUN \
 RUN useradd -m git
 
 # Copy nginx conf file
-ADD ./git-http-backend.conf /etc/nginx/sites-enabled/git-http-backend.conf
+ADD ./nginx/git.conf /etc/nginx/sites-enabled/git.conf
 
 #Create gitmask folder structure & set as volumes
 RUN mkdir -p /srv/gitmask/ && \
@@ -38,7 +38,7 @@ RUN cd /srv/gitmask/username/repo.git && \
 	git init --bare && \
 	git config http.receivepack true && \
 	git config core.sharedRepository true
-ADD ./git-post-receive.hook /srv/gitmask/username/repo.git/hooks/post-receive
+ADD ./git/post-receive.hook /srv/gitmask/username/repo.git/hooks/post-receive
 RUN cd /srv/gitmask/username/repo.git/hooks/ && chmod +x post-receive
 RUN chown -R git:www-data /srv/gitmask && chmod -R g+ws /srv/gitmask
 
