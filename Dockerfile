@@ -34,7 +34,9 @@ RUN chown -R git:www-data /srv/gitmask/ && \
 	chmod -R g+ws /srv/gitmask/
 ADD ./git/post-receive.hook /srv/gitmask/post-receive.hook
 ADD ./start.sh /srv/gitmask/start.sh
-RUN chmod +x /srv/gitmask/start.sh
+ADD ./git_handler.sh /srv/gitmask/git_handler.sh
+RUN chmod +x /srv/gitmask/start.sh && \
+    chmod +x /srv/gitmask/git_handler.sh
 
 #TEMPORARY - create the repository folder
 RUN mkdir -p /srv/gitmask/username/repo.git
