@@ -5,7 +5,7 @@ MAINTAINER jason@thesparktree.com
 RUN \
   add-apt-repository ppa:nginx/development && \
   apt-get update && \
-  apt-get install -y build-essential fcgiwrap curl git unzip libreadline-dev libncurses5-dev libpcre3-dev libssl-dev luajit lua5.1 liblua5.1-0-dev nano perl wget nginx-extras && \
+  apt-get install -y build-essential python-dev libffi-dev fcgiwrap curl git unzip libreadline-dev libncurses5-dev libpcre3-dev libssl-dev luajit lua5.1 liblua5.1-0-dev nano perl wget nginx-extras && \
   rm -rf /var/lib/apt/lists/*
 
 # Install luarocks
@@ -24,6 +24,8 @@ RUN \
 # Install pip
 RUN curl --silent --show-error --retry 5 https://bootstrap.pypa.io/get-pip.py | sudo python2.7
 
+# Install python github library
+RUN sudo pip install --pre github3.py
 
 # Copy nginx conf file
 ADD ./nginx/git.conf /etc/nginx/sites-enabled/git.conf
@@ -31,8 +33,8 @@ ADD ./nginx/git.conf /etc/nginx/sites-enabled/git.conf
 #Create gitmask folder structure & set as volumes
 RUN mkdir -p /srv/gitmask/
 
-RUN chown -R www-data:www-data /srv/gitmask/ && \
-	chmod -R g+ws /srv/gitmask/
+RUN chown -R www-data:www-data /srv/gitmask && \
+	chmod -R g+ws /srv/gitmask
 ADD ./git/post-receive.py /srv/gitmask/post-receive.py
 ADD ./start.sh /srv/gitmask/start.sh
 ADD ./git_handler.py /srv/gitmask/git_handler.py

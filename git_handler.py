@@ -17,13 +17,13 @@ if not os.path.isdir(repopath):
     os.chdir(repopath)
 
     # set the correct git options
-    output = subprocess.check_output(["git", "init", "--bare", repopath])
+    output = subprocess.check_output(["git", "clone", "--bare", "https://github.com/" + username + '/' + reponame + '.git', repopath])
     output = subprocess.check_output(["git", "config", "http.receivepack", "true"])
     output = subprocess.check_output(["git", "config", "core.sharedRepository", "true"])
 
     # copy over the post-receive hook & make executable
     hookpath = os.path.join(repopath,'hooks/post-receive')
-    shutil.copy('/srv/gitmask/post-receive.hook', hookpath)
+    shutil.copy('/srv/gitmask/post-receive.py', hookpath)
     st = os.stat(hookpath)
     os.chmod(hookpath, st.st_mode | stat.S_IEXEC)
 
@@ -47,7 +47,8 @@ childenv = {'PATH_INFO': os.environ['PATH_INFO'],
             'CONTENT_TYPE': os.environ['CONTENT_TYPE'],
             'QUERY_STRING': os.environ['QUERY_STRING'],
             'REQUEST_METHOD': os.environ['REQUEST_METHOD'],
-            'GITHUB_DEST_REPO': username + '/' + reponame
+            'GITHUB_DEST_USER': username,
+            'GITHUB_DEST_REPO': reponame
             }
 
 process = subprocess.Popen(httpbackendcmd, shell=False,
