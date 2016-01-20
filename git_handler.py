@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/python -u
 import os
 import subprocess
 import stat
@@ -48,7 +48,8 @@ childenv = {'PATH_INFO': os.environ['PATH_INFO'],
             'QUERY_STRING': os.environ['QUERY_STRING'],
             'REQUEST_METHOD': os.environ['REQUEST_METHOD'],
             'GITHUB_DEST_USER': username,
-            'GITHUB_DEST_REPO': reponame
+            'GITHUB_DEST_REPO': reponame,
+            'GITHUB_API_TOKEN': os.environ['GITHUB_API_TOKEN']
             }
 
 process = subprocess.Popen(httpbackendcmd, shell=False,
