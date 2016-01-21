@@ -44,7 +44,7 @@ COPY ./git/post-receive.py /srv/gitmask/post-receive.py
 
 RUN chown -R www-data:www-data /srv/gitmask && \
 	chmod -R g+ws /srv/gitmask && \
-    chmod +x /srv/gitmask/start.sh && \
+    chmod +x /srv/gitmask/run.sh && \
     chmod +x /srv/gitmask/git_handler.py
 
 
@@ -54,4 +54,4 @@ EXPOSE 80
 EXPOSE 443
 
 #CMD ["bash"]
-CMD ["/srv/gitmask/start.sh"]
+CMD ["/srv/gitmask/run.sh"]
