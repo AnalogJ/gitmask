@@ -40,16 +40,7 @@ ADD ./start.sh /srv/gitmask/start.sh
 ADD ./git_handler.py /srv/gitmask/git_handler.py
 RUN chmod +x /srv/gitmask/start.sh && \
     chmod +x /srv/gitmask/git_handler.py
-
-#TEMPORARY - create the repository folder
-#RUN mkdir -p /srv/gitmask/username/repo.git
-#RUN cd /srv/gitmask/username/repo.git && \
-#	git init --bare && \
-#	git config http.receivepack true && \
-#	git config core.sharedRepository true
-#RUN cp /srv/gitmask/post-receive.py /srv/gitmask/username/repo.git/hooks/post-receive && \
-#    chmod +x  /srv/gitmask/username/repo.git/hooks/post-receive
-#RUN chown -R www-data:www-data /srv/gitmask && chmod -R g+ws /srv/gitmask
+e
 
 VOLUME ["/srv/gitmask"]
 
