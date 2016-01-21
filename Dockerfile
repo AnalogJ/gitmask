@@ -39,14 +39,12 @@ ADD ./letsencrypt /srv/letsencrypt
 RUN mkdir /srv/letsencrypt/.acme-challenges && chmod +x /srv/letsencrypt/letsencrypt.sh && ln -s /srv/letsencrypt/.acme-challenges /var/www/letsencrypt
 
 #Create gitmask folder structure & set as volumes
-RUN mkdir -p /srv/gitmask/
+ADD ./gitmask /srv/gitmask
+ADD ./git/post-receive.py /srv/gitmask/post-receive.py
 
 RUN chown -R www-data:www-data /srv/gitmask && \
-	chmod -R g+ws /srv/gitmask
-ADD ./git/post-receive.py /srv/gitmask/post-receive.py
-ADD ./gitmask /srv/gitmask
-
-RUN chmod +x /srv/gitmask/start.sh && \
+	chmod -R g+ws /srv/gitmask && \
+    chmod +x /srv/gitmask/start.sh && \
     chmod +x /srv/gitmask/git_handler.py
 
 
