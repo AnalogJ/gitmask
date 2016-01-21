@@ -30,17 +30,17 @@ RUN sudo pip install --pre github3.py
 # Create confd folder structure
 RUN curl -L -o /usr/local/bin/confd https://github.com/kelseyhightower/confd/releases/download/v0.11.0/confd-0.11.0-linux-amd64
 RUN chmod u+x  /usr/local/bin/confd
-ADD ./conf.d /etc/confd/conf.d
-ADD ./templates /etc/confd/templates
+COPY ./conf.d /etc/confd/conf.d
+COPY ./templates /etc/confd/templates
 
 # Clone letsencrypt.sh repo
 RUN cd /srv && git clone --depth 1 https://github.com/lukas2511/letsencrypt.sh.git letsencrypt
-ADD ./letsencrypt /srv/letsencrypt
+COPY ./letsencrypt /srv/letsencrypt
 RUN mkdir /srv/letsencrypt/.acme-challenges && chmod +x /srv/letsencrypt/letsencrypt.sh && ln -s /srv/letsencrypt/.acme-challenges /var/www/letsencrypt
 
 #Create gitmask folder structure & set as volumes
-ADD ./gitmask /srv/gitmask
-ADD ./git/post-receive.py /srv/gitmask/post-receive.py
+COPY ./gitmask /srv/gitmask
+COPY ./git/post-receive.py /srv/gitmask/post-receive.py
 
 RUN chown -R www-data:www-data /srv/gitmask && \
 	chmod -R g+ws /srv/gitmask && \
