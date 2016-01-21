@@ -44,8 +44,8 @@ RUN mkdir -p /srv/gitmask/
 RUN chown -R www-data:www-data /srv/gitmask && \
 	chmod -R g+ws /srv/gitmask
 ADD ./git/post-receive.py /srv/gitmask/post-receive.py
-ADD ./start.sh /srv/gitmask/start.sh
-ADD ./git_handler.py /srv/gitmask/git_handler.py
+ADD ./gitmask /srv/gitmask
+
 RUN chmod +x /srv/gitmask/start.sh && \
     chmod +x /srv/gitmask/git_handler.py
 
