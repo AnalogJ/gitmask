@@ -27,8 +27,11 @@ RUN curl --silent --show-error --retry 5 https://bootstrap.pypa.io/get-pip.py | 
 # Install python github library
 RUN sudo pip install --pre github3.py
 
-# Copy nginx conf file
-ADD ./nginx/git.conf /etc/nginx/sites-enabled/git.conf
+#Create confd folder structure
+RUN curl -L -o /usr/local/bin/confd https://github.com/kelseyhightower/confd/releases/download/v0.11.0/confd-0.11.0-linux-amd64
+RUN chmod u+x  /usr/local/bin/confd
+ADD ./conf.d /etc/confd/conf.d
+ADD ./templates /etc/confd/templates
 
 #Create gitmask folder structure & set as volumes
 RUN mkdir -p /srv/gitmask/
@@ -40,11 +43,11 @@ ADD ./start.sh /srv/gitmask/start.sh
 ADD ./git_handler.py /srv/gitmask/git_handler.py
 RUN chmod +x /srv/gitmask/start.sh && \
     chmod +x /srv/gitmask/git_handler.py
-e
+
 
 VOLUME ["/srv/gitmask"]
 
-EXPOSE 8080
+EXPOSE 80
 EXPOSE 943
 
 CMD ["/srv/gitmask/start.sh"]

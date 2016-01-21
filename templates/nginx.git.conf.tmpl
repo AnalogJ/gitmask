@@ -1,7 +1,7 @@
 # HTTP server
 #
 server {
-    listen      8080;
+    listen      80;
     server_name git.gitmask.com;
     access_log /var/log/nginx/http.git.gitmask.com.log;
     rewrite     ^   http://$server_name$request_uri? permanent;
@@ -12,7 +12,7 @@ server {
 server {
     listen       943;
     server_name  git.gitmask.com;
-    root /srv/gitmask/username;
+    root /srv/gitmask;
     access_log /var/log/nginx/https.git.gitmask.com.log;
 
     #ssl                  on;
@@ -33,29 +33,9 @@ server {
 		fastcgi_param PATH_INFO         $uri;
 		fastcgi_param GIT_PROJECT_ROOT /srv/gitmask;
 		fastcgi_param GIT_HTTP_EXPORT_ALL "";
-        fastcgi_param GITHUB_API_TOKEN a3921f77ba7e3eb79b71ef3f543c98f0ccc37e66;
+        fastcgi_param GITHUB_API_TOKEN {{getenv "GITHUB_API_TOKEN"}};
 		fastcgi_pass unix:/var/run/fcgiwrap.socket;
-
-
-		#gzip off;
-        #root /srv/gitmask;
-        #autoindex on;
-        #fastcgi_pass unix:/var/run/fcgiwrap.socket;
-        #include fastcgi_params;
-        #fastcgi_param DOCUMENT_ROOT /srv/gitmask;
         fastcgi_param SCRIPT_FILENAME /srv/gitmask/git_handler.py;
 	}
-
-    #location ~ ^.*\.git/(HEAD|info/refs|objects/info/.*|git-(upload|receive)-pack)$ {
-    #    root /srv/gitmask;
-	#
-    #    fastcgi_pass unix:/var/run/fcgiwrap.socket;
-    #    fastcgi_param SCRIPT_FILENAME   /usr/lib/git-core/git-http-backend;
-    #    fastcgi_param PATH_INFO         $uri;
-    #    fastcgi_param GIT_PROJECT_ROOT  /home/git/repositories;
-    #    fastcgi_param GIT_HTTP_EXPORT_ALL "";
-    #    fastcgi_param REMOTE_USER $remote_user;
-    #    include fastcgi_params;
-    #}
 
 }
