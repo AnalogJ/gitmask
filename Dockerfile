@@ -48,7 +48,7 @@ RUN chmod +x /srv/gitmask/start.sh && \
 VOLUME ["/srv/gitmask"]
 
 EXPOSE 80
-EXPOSE 943
+EXPOSE 443
 
 CMD ["/srv/gitmask/start.sh"]
 #service fcgiwrap start
