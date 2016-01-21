@@ -1,0 +1,6 @@
+[template]
+src = "nginx.http.gitmask.conf.tmpl"
+dest = "/etc/nginx/sites-available/http.gitmask.conf"
+keys = [
+	"GITHUB_API_TOKEN"
+]

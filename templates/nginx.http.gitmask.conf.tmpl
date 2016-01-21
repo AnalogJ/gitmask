@@ -1,0 +1,16 @@
+# HTTP server
+#
+server {
+    listen      80;
+    server_name git.gitmask.com;
+    access_log /var/log/nginx/http.git.gitmask.com.log;
+
+    location '/.well-known/acme-challenge' {
+        default_type "text/plain";
+        alias /var/www/letsencrypt;
+    }
+
+    location / {
+        return 301 https://$server_name$request_uri;
+    }
+}

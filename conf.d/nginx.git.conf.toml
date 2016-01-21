@@ -1,6 +1,0 @@
-[template]
-src = "nginx.git.conf.tmpl"
-dest = "/etc/nginx/sites-enabled/git.conf"
-keys = [
-	"GITHUB_API_TOKEN"
-]
