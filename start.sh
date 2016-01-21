@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+echo "Populate confd templates"
+confd -onetime -backend env
+
 echo "Starting fcgiwrap service..."
 service fcgiwrap start
 
