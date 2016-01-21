@@ -6,7 +6,7 @@ echo "Starting fcgiwrap service..."
 service fcgiwrap start
 
 echo "Starting nginx daemon..."
-nginx #-g "daemon off;"
+nginx
 
 echo "Enable the http endpoint"
 ln -s /etc/nginx/sites-available/http.gitmask.conf /etc/nginx/sites-enabled/http.gitmask.conf
