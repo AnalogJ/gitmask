@@ -34,7 +34,7 @@ ADD ./conf.d /etc/confd/conf.d
 ADD ./templates /etc/confd/templates
 
 # Clone letsencrypt.sh repo
-RUN cd /srv && git clone --depth 1  https://github.com/lukas2511/letsencrypt.sh.git letsencrypt
+RUN cd /srv && git clone --depth 1 https://github.com/lukas2511/letsencrypt.sh.git letsencrypt
 ADD ./letsencrypt /srv/letsencrypt
 RUN mkdir /srv/letsencrypt/.acme-challenges && chmod +x /srv/letsencrypt/letsencrypt.sh && ln -s /srv/letsencrypt/.acme-challenges /var/www/letsencrypt
 
