@@ -4,7 +4,15 @@ server {
     listen      80;
     server_name git.gitmask.com;
     access_log /var/log/nginx/http.git.gitmask.com.log;
-    rewrite     ^   http://$server_name$request_uri? permanent;
+
+    location '/.well-known/acme-challenge' {
+        default_type "text/plain";
+        alias /var/www/letsencrypt;
+    }
+
+    location / {
+        return 301 https://$server_name$request_uri;
+    }
 }
 
 # HTTPS server
@@ -16,8 +24,8 @@ server {
     access_log /var/log/nginx/https.git.gitmask.com.log;
 
     #ssl                  on;
-    #ssl_certificate      /etc/ssl/certs/certforyoursite.crt;
-    #ssl_certificate_key  /etc/ssl/private/sitekey.pem;
+    #ssl_certificate      /var/www/letsencrypt/certs/git.gitmask.com/fullchain.pem;
+    #ssl_certificate_key  /var/www/letsencrypt/certs/git.gitmask.com/privkey.pem;
     #ssl_session_timeout 5m;
     #ssl_protocols        TLSv1 TLSv1.1 TLSv1.2;
     #ssl_ciphers          HIGH:!ADH:!MD5;

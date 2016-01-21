@@ -27,11 +27,16 @@ RUN curl --silent --show-error --retry 5 https://bootstrap.pypa.io/get-pip.py | 
 # Install python github library
 RUN sudo pip install --pre github3.py
 
-#Create confd folder structure
+# Create confd folder structure
 RUN curl -L -o /usr/local/bin/confd https://github.com/kelseyhightower/confd/releases/download/v0.11.0/confd-0.11.0-linux-amd64
 RUN chmod u+x  /usr/local/bin/confd
 ADD ./conf.d /etc/confd/conf.d
 ADD ./templates /etc/confd/templates
+
+# Clone letsencrypt.sh repo
+RUN cd /var/www/ && git clone --depth 1  https://github.com/lukas2511/letsencrypt.sh.git letsencrypt
+ADD ./letsencrypt /var/www/letsencrypt
+RUN mkdir /var/www/letsencrypt/.acme-challenges && chmod +x /var/www/letsencrypt/letsencrypt.sh
 
 #Create gitmask folder structure & set as volumes
 RUN mkdir -p /srv/gitmask/
@@ -50,7 +55,5 @@ VOLUME ["/srv/gitmask"]
 EXPOSE 80
 EXPOSE 443
 
+#CMD ["bash"]
 CMD ["/srv/gitmask/start.sh"]
-#service fcgiwrap start
-#nginx -g "daemon off;"
-#CMD ["nginx", "-g", "daemon off;"]
