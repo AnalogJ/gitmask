@@ -42,6 +42,9 @@ RUN mkdir /srv/letsencrypt/.acme-challenges && chmod +x /srv/letsencrypt/letsenc
 COPY ./gitmask /srv/gitmask
 COPY ./git/post-receive.py /srv/gitmask/post-receive.py
 
+#Verify folder structure
+RUN ls -alt /srv/gitmask
+
 RUN chown -R www-data:www-data /srv/gitmask && \
 	chmod -R g+ws /srv/gitmask && \
     chmod +x /srv/gitmask/run.sh && \
