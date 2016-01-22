@@ -22,7 +22,7 @@ server {
 		#alias /usr/lib/git-core/git-http-backend;
 		include fastcgi_params;
 		fastcgi_param PATH_INFO         $uri;
-		fastcgi_param GIT_PROJECT_ROOT /srv/gitmask;
+		fastcgi_param GIT_PROJECT_ROOT /srv/gitmask/data;
 		fastcgi_param GIT_HTTP_EXPORT_ALL "";
         fastcgi_param GITHUB_API_TOKEN {{getenv "GITHUB_API_TOKEN"}};
 		fastcgi_pass unix:/var/run/fcgiwrap.socket;

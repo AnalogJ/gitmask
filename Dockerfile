@@ -43,15 +43,13 @@ COPY ./gitmask /srv/gitmask
 COPY ./git/post-receive.py /srv/gitmask/post-receive.py
 
 #Verify folder structure
-RUN ls -alt /srv/gitmask
-
+RUN mkdir -p /srv/gitmask/data
 RUN chown -R www-data:www-data /srv/gitmask && \
 	chmod -R g+ws /srv/gitmask && \
     chmod +x /srv/gitmask/run.sh && \
     chmod +x /srv/gitmask/git_handler.py
 
-
-VOLUME ["/srv/gitmask"]
+VOLUME ["/srv/gitmask/data"]
 
 EXPOSE 80
 EXPOSE 443

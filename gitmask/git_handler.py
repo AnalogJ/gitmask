@@ -22,7 +22,7 @@ if not os.path.isdir(repopath):
     output = subprocess.check_output(["git", "config", "core.sharedRepository", "true"])
 
     # copy over the post-receive hook & make executable
-    hookpath = os.path.join(repopath,'hooks/post-receive')
+    hookpath = os.path.join(repopath, 'hooks/post-receive')
     shutil.copy('/srv/gitmask/post-receive.py', hookpath)
     st = os.stat(hookpath)
     os.chmod(hookpath, st.st_mode | stat.S_IEXEC)
