@@ -12,7 +12,10 @@ echo "Starting nginx service..."
 service nginx start
 
 echo "Generate Letsencrypt SSL certificates"
-cd "/srv/letsencrypt/" && ./letsencrypt.sh --cron
+/srv/letsencrypt/letsencrypt.sh --cron
+
+echo "Register Letsencrypt to run weekly"
+crontab -l | { cat; echo "@weekly /srv/letsencrypt/letsencrypt.sh --cron"; } | crontab -
 
 echo "Enable the https endpoint"
 ln -s /etc/nginx/sites-available/https.gitmask.conf /etc/nginx/sites-enabled/https.gitmask.conf
