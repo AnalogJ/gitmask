@@ -20,7 +20,7 @@ crontab -l | { cat; echo "@weekly /srv/letsencrypt/letsencrypt.sh --cron"; } | c
 echo "Enable the https endpoint"
 ln -s /etc/nginx/sites-available/https.gitmask.conf /etc/nginx/sites-enabled/https.gitmask.conf
 
-echo "Restart nginx service..."
-service nginx restart
+echo "Reload nginx service..."
+service nginx reload
 
 tail -f /var/log/nginx/error.log -f /var/log/nginx/access.log -f /var/log/nginx/https.git.gitmask.com.log -f /var/log/nginx/http.git.gitmask.com.log
