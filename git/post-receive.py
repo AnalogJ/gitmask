@@ -30,8 +30,8 @@ try:
     # based off of http://stackoverflow.com/a/5018332/1157633
     # TODO: randomize commit timestamps as well?
     subprocess.check_output(["git", "filter-branch", "--tag-name-filter", "cat", "--env-filter",
-                             "export GIT_AUTHOR_NAME='Anonymous'; export GIT_AUTHOR_EMAIL='gitmask-anonymous@users.noreply.github.com'; export GIT_COMMITTER_NAME='Anonymous'; export GIT_COMMITTER_EMAIL='gitmask-anonymous@users.noreply.github.com'"
-                                , oldrev +".." +refname])
+                             "export GIT_AUTHOR_NAME='Anonymous'; export GIT_AUTHOR_EMAIL='gitmask-anonymous@users.noreply.github.com'; export GIT_COMMITTER_NAME='Anonymous'; export GIT_COMMITTER_EMAIL='gitmask-anonymous@users.noreply.github.com'",
+                             oldrev +".." +refname])
 
     # Authenticate against the github api
     token = os.environ['GITHUB_API_TOKEN']
@@ -51,7 +51,7 @@ try:
         time.sleep(5) # delays for 5 seconds
 
         print('#### Creating pull request')
-        pull_request = remote_github_repository.create_pull('Test Title',dest_branch, 'gitmask-anonymous:'+refname)
+        pull_request = remote_github_repository.create_pull('Anonymous Pull Request',dest_branch, 'gitmask-anonymous:'+refname)
 
         # print('#### Creating message on pr issue')
         # pull_request.create_comment()
