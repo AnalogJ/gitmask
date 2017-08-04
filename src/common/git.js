@@ -7,9 +7,9 @@ require("lambda-git")({
 function cloneRepo(logger, repoOwner, repoName, destination, ref){
     var deferred = q.defer();
 
-    var cmd = `git clone --depth 1 https://github.com/${repoOwner}/${repoName} ${destination}`
+    var cmd = `/tmp/git/usr/bin/git clone --depth 1 https://github.com/${repoOwner}/${repoName} ${destination}`
     if(ref){
-        cmd = `git clone -b ${ref} --single-branch --depth 1 https://github.com/${repoOwner}/${repoName} ${destination}`
+        cmd = `/tmp/git/usr/bin/git clone -b ${ref} --single-branch --depth 1 https://github.com/${repoOwner}/${repoName} ${destination}`
     }
 
     logger.info("Cloning repository with the following command.")
