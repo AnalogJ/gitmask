@@ -1,0 +1,19 @@
+machine:
+  services:
+    - docker
+  node:
+    version: 4.3.0
+
+dependencies:
+  override:
+    - npm install -g serverless
+    - npm install
+    - npm ls || true
+
+deployment:
+  deploy:
+    branch: [serverless, beta, master]
+    commands:
+      - npm prune --production #prune node_modules directory to only contain production modules
+      - sls prune -n 4
+      - serverless deploy --stage $CIRCLE_BRANCH --region us-east-1
