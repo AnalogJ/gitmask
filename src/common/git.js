@@ -14,6 +14,7 @@ function cloneRepo(logger, repoOwner, repoName, destination, ref){
 
     logger.info("Cloning repository with the following command.")
     logger.info(cmd)
+    logger.info(JSON.stringify(process.env))
     exec(cmd, {
         env: process.env
     }, function(err, stdout, stderr) {
