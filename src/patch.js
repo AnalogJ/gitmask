@@ -1,5 +1,4 @@
 'use strict';
-const debug = require('debug')('gitmask:patch');
 var nconf = require('./common/nconf')
 // require("lambda-git")();
 var Q = require("q");  // npm install q
@@ -13,11 +12,13 @@ var github = new GitHubApi({
 var tmp = require('tmp');
 var git = require('./common/git');
 
+var Logger = require('./common/logger')
+
 
 module.exports.handler = (event, context, callback) => {
+    var logger = new Logger()
 
-    var log = []
-    log.push("#### Gitmask is running...")
+    logger.info("#### Gitmask is running...")
 
     //determine the repo that we need to fork
     var dest_scm = event.path.scm
@@ -30,52 +31,52 @@ module.exports.handler = (event, context, callback) => {
     }
 
     if(dest_scm != 'github.com'){
-        log.push("FATAL! We cannot handle scm's other than github.com")
-        return callback(null, log)
+        logger.info("FATAL! We cannot handle scm's other than github.com")
+        return callback(null, JSON.stringify(logger.get()))
     }
 
-    log.push('Destination Repository: ' + dest_org + '/' + dest_repo )
-    log.push('Destination Ref: ' + dest_ref)
-    // log.push('Anonymous Commmits: ' + oldrev + '..' + newrev)
+    logger.info('Destination Repository: ' + dest_org + '/' + dest_repo )
+    logger.info('Destination Ref: ' + dest_ref)
+    // logger.info('Anonymous Commmits: ' + oldrev + '..' + newrev)
 
-    log.push('Authenticating to Github')
+    logger.info('Authenticating to Github')
     // user token
     github.authenticate({
         type: "token",
         token: nconf.get('GITHUB_API_TOKEN')
     });
 
-    log.push('Forking repository anonymously')
+    logger.info('Forking repository anonymously')
     github.repos.fork({
         owner: dest_org,
         repo: dest_repo
     })
         .then(function(){
-            log.push('Cloning forked repository')
+            logger.info('Cloning forked repository')
 
             var tmpobj = tmp.dirSync();
 
             return git.cloneRepo('capsuleCD', dest_repo, tmpobj.name, dest_ref)
         })
         .then(function(clone_stdout){
-            log.push('Anonymizing and applying patches')
+            logger.info('Anonymizing and applying patches')
         })
         .then(function(){
-            log.push('Pushing local changes up to github')
+            logger.info('Pushing local changes up to github')
         })
         .then(function(){
-            log.push('Creating pull request with Ghost user')
+            logger.info('Creating pull request with Ghost user')
         })
         .then(function(){
-            log.push('Creating message on PR issue')
+            logger.info('Creating message on PR issue')
         })
         .then(function(){
-            log.push('Deleting forked repository')
+            logger.info('Deleting forked repository')
         })
         .then(function(){
-            log.push('Your pull request is live at the following url: ')
+            logger.info('Your pull request is live at the following url: ')
         })
         .then(function(){
-            return callback(null, log);
+            return callback(null, logger.get());
         })
 };

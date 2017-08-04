@@ -26,6 +26,7 @@ provider:
     STAGE: ${opt:stage, self:provider.stage}
     NODE_ENV: production
     GITHUB_API_TOKEN: ${env:GITHUB_API_TOKEN}
+    DEBUG: gitmask:*
 
 custom:
 
