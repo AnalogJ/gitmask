@@ -56,7 +56,7 @@ module.exports.handler = (event, context, callback) => {
 
             var tmpobj = tmp.dirSync();
 
-            return git.cloneRepo('capsuleCD', dest_repo, tmpobj.name, dest_ref)
+            return git.cloneRepo(logger, 'capsuleCD', dest_repo, tmpobj.name, dest_ref)
         })
         .then(function(clone_stdout){
             logger.info('Anonymizing and applying patches')
@@ -78,5 +78,10 @@ module.exports.handler = (event, context, callback) => {
         })
         .then(function(){
             return callback(null, logger.get());
+        })
+        .fail(function(err){
+            logger.info("AN ERROR OCCURRED")
+            logger.info(err)
+            return callback(null, logger.get())
         })
 };
