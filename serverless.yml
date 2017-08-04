@@ -129,7 +129,7 @@ functions:
     memorySize: 128
     events:
       - http:
-          path: version
+          path: patch/{scm}/{org}/{repo}
           method: post
           response: ${self:custom.standardResponses}
           integration: lambda
