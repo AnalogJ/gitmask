@@ -1,6 +1,8 @@
 var exec = require('child_process').exec;
 var q = require("q");  // npm install q
-require("lambda-git")();
+require("lambda-git")({
+    updateEnv: true
+});
 
 function cloneRepo(logger, repoOwner, repoName, destination, ref){
     var deferred = q.defer();
