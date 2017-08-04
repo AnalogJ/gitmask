@@ -1,5 +1,5 @@
 var exec = require('child_process').exec;
-
+var q = require("q");  // npm install q
 
 function cloneRepo(logger, repoOwner, repoName, destination, ref){
     var deferred = q.defer();
