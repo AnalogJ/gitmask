@@ -1,6 +1,5 @@
 'use strict';
 var nconf = require('./common/nconf')
-// require("lambda-git")();
 var Q = require("q");  // npm install q
 var exec = require('child_process').exec;
 var GitHubApi = require("github");
