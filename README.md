@@ -33,8 +33,9 @@ http://developers.slashdot.org/story/15/03/22/1748238/a-software-project-full-of
 
 
 # Examples
-git bundle create commits.bundle develop_branch..public_branch \
-&& curl -v -H "Content-Type:application/octet-stream" -X POST --data-binary "@commits.bundle" https://git.gitmask.com/beta/patch
+git bundle create commits.bundle public_branch..local_branch \
+&& curl -v -H "Content-Type:application/octet-stream" -X POST \
+	--data-binary "@commits.bundle" https://git.gitmask.com/beta/patch/github.com/AnalogJ/tags_analogj_test
 
 
 # Resources

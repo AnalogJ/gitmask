@@ -94,6 +94,8 @@ functions:
           method: post
           response: ${self:custom.standardResponses}
           integration: lambda
+          request:
+            passThrough: WHEN_NO_TEMPLATES
 
 plugins:
    - serverless-prune-plugin
