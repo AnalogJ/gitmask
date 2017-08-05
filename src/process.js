@@ -114,10 +114,6 @@ module.exports.handler = (event, context, callback) => {
                 })
                 .then(function(){
                     debug('Squash the commits')
-                    //TODO: NEED TO SQUASH AND ANONYMIZE PRS.
-                    //TODO: https://stackoverflow.com/a/616766/1157633
-
-
                     return git.squashCommits(tmpobj.name, branch, anonLocalBranchName, bundleLocalBranchName)
 
                 })
@@ -150,60 +146,19 @@ module.exports.handler = (event, context, callback) => {
                 .fail(function(err){
                     debug("!!!!!!AN ERROR OCCURRED!!!!!!")
                     debug(err)
-                    return callback(null, err)
+
+                    //cleanup
+                    debug('Delete forked repository');
+                    return github.repos.delete({
+                        owner: gitmask_org,
+                        repo: repo
+                    })
+                        .then(function(){
+                            return callback(null, err)
+                        })
                 })
+
         })
-
-
-
-
-
-
-
-    //
-    // logger.info('Forking repository anonymously')
-    // github.repos.fork({
-    //     owner: dest_org,
-    //     repo: dest_repo
-    // })
-    //     .then(function(){
-    //         logger.info('Cloning forked repository')
-    //
-    //         var tmpobj = tmp.dirSync();
-    //
-    //         return git.cloneRepo(logger, nconf.get('GITHUB_API_TOKEN'), 'gitmask-anonymous', dest_repo, tmpobj.name, dest_ref)
-    //             .then(function(){
-    //                 logger.info('Anonymizing and applying patches')
-    //
-    //                 logger.info(new Buffer(event.body, 'base64'))
-    //
-    //
-    //             })
-    //             .then(function(){
-    //                 logger.info('Pushing local changes up to github')
-    //             })
-    //     })
-    //     .then(function(){
-    //         logger.info('Creating pull request with Ghost user')
-    //     })
-    //     .then(function(){
-    //         logger.info('Creating message on PR issue')
-    //     })
-    //     .then(function(){
-    //         logger.info('Deleting forked repository')
-    //     })
-    //     .then(function(){
-    //         logger.info('Your pull request is live at the following url: ')
-    //     })
-    //     .then(function(){
-    //         return callback(null, logger.get());
-    //     })
-    //
-    //     .fail(function(err){
-    //         logger.info("AN ERROR OCCURRED")
-    //         logger.info(err)
-    //         return callback(null, logger.get())
-    //     })
 };
 
 
