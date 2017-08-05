@@ -55,7 +55,7 @@ module.exports.handler = (event, context, callback) => {
 
             var tmpobj = tmp.dirSync();
 
-            return git.cloneRepo(logger, nconf.get('GITHUB_API_TOKEN'), 'capsuleCD', dest_repo, tmpobj.name, dest_ref)
+            return git.cloneRepo(logger, nconf.get('GITHUB_API_TOKEN'), 'gitmask-anonymous', dest_repo, tmpobj.name, dest_ref)
         })
         .then(function(clone_stdout){
             logger.info('Anonymizing and applying patches')
