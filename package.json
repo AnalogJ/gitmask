@@ -20,6 +20,7 @@
     "github": "^9.2.0",
     "nconf": "^0.8.4",
     "q": "^1.5.0",
+    "serverless-apigwy-binary": "^0.1.0",
     "serverless-prune-plugin": "^1.0.4",
     "tmp": "0.0.31"
   },
