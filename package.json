@@ -18,7 +18,6 @@
     "aws-sdk": "^2.72.0",
     "debug": "^2.6.3",
     "github": "^9.2.0",
-    "lambda-git": "^0.1.0",
     "nconf": "^0.8.4",
     "q": "^1.5.0",
     "serverless-prune-plugin": "^1.0.4",

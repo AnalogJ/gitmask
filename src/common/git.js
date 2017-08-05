@@ -1,15 +1,23 @@
 var exec = require('child_process').exec;
 var q = require("q");  // npm install q
-require("lambda-git")({
-    updateEnv: true
-});
+var fs = require('fs')
+var path = require('path');
+
+var targetDirectory = path.resolve(__dirname, "../../opt/")
+var GIT_TEMPLATE_DIR = path.resolve(targetDirectory, 'usr/share/git-core/templates');
+var GIT_EXEC_PATH = path.resolve(targetDirectory, 'usr/libexec/git-core');
+
+process.env.PATH = path.resolve(targetDirectory, 'usr/bin') + ":" + process.env.PATH  ;
+process.env.GIT_TEMPLATE_DIR = GIT_TEMPLATE_DIR;
+process.env.GIT_EXEC_PATH = GIT_EXEC_PATH;
+
 
 function cloneRepo(logger, repoOwner, repoName, destination, ref){
     var deferred = q.defer();
 
-    var cmd = `/tmp/git/usr/bin/git clone --depth 1 https://github.com/${repoOwner}/${repoName} ${destination}`
+    var cmd = `git clone --depth 1 https://github.com/${repoOwner}/${repoName} ${destination}`
     if(ref){
-        cmd = `/tmp/git/usr/bin/git clone -b ${ref} --single-branch --depth 1 https://github.com/${repoOwner}/${repoName} ${destination}`
+        cmd = `git clone -b ${ref} --single-branch --depth 1 https://github.com/${repoOwner}/${repoName} ${destination}`
     }
 
     logger.info("Cloning repository with the following command.")
