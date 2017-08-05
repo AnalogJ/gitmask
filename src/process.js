@@ -71,14 +71,24 @@ module.exports.handler = (event, context, callback) => {
             return git.cloneRepo(remote, tmpobj.name)
                 .then(function(){
                     debug('Download the git bundle from s3 for processing')
+
+                    var deferred = q.defer();
                     var options = {
                         Bucket    : upload_bucket,
                         Key    : upload_key,
                     };
-                    s3.getObject(options)
-
                     var bundleFile = fs.createWriteStream(bundlePath);
-                    s3.getObject(options).createReadStream().pipe(bundleFile);
+                    s3.getObject(options)
+                        .createReadStream()
+                        .pipe(bundleFile)
+                        .on('close', function(){
+                            deferred.resolve({})
+                        })
+                        .on('error', function(){
+                            deferred.reject("An error occured while retrieving bundle.")
+                        })
+
+                    return deferred.promise
                 })
                 .then(function(){
                     debug('Validate that the bundle file can be applied to this repository')
@@ -101,6 +111,8 @@ module.exports.handler = (event, context, callback) => {
                 .then(function(){
                     debug('Squash the commits')
                     //TODO: NEED TO SQUASH AND ANONYMIZE PRS.
+                    //TODO: https://stackoverflow.com/a/616766/1157633
+
                 })
                 .then(function(){
                     debug('Push the local branch up to forked repository')
