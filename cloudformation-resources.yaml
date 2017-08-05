@@ -5,13 +5,13 @@
 # https://github.com/serverless/serverless/issues/2967
 # https://serverless.com/framework/docs/providers/aws/guide/resources/#aws-cloudformation-resource-reference
 
-#QuietThymeUploadBucket:
+#S3BucketGitmaskapi:
 #  Type: AWS::S3::Bucket
 #  Properties:
 #    BucketName: "${self:service}-${opt:stage, self:provider.stage}-upload"
 
 
-QuietThymeUploadBucketPolicy:
+GitmaskUploadBucketPolicy:
   DependsOn: "S3BucketGitmaskapi${opt:stage, self:provider.stage}upload"
   Type: AWS::S3::BucketPolicy
   Properties:
