@@ -20,6 +20,7 @@ provider:
   region: us-east-1
   timeout: 40 # optional, default is 6
   runtime: nodejs4.3
+  memorySize: 128
   environment:
     DOMAIN: git.gitmask.com
     DEPLOY_SHA: ${env:CIRCLE_SHA1}
