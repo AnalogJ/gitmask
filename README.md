@@ -37,13 +37,22 @@ git bundle create commits.bundle public_branch..local_branch \
 && curl -v -H "Content-Type:application/x-binary" -X POST \
 	--data-binary "@commits.bundle" https://git.gitmask.com/beta/patch/github.com/AnalogJ/tags_analogj_test
 
-curl -v -H -X POST \
-	--data-binary "@commits.bundle" https://git.gitmask.com/beta/patch/github.com/AnalogJ/tags_analogj_test
+curl -L -H "Content-Type:application/json" -v -X POST \
+	--data-binary "@commits.bundle" https://git.gitmask.com/beta/bundle/github.com/AnalogJ/tags_analogj_test/master
 
-curl -v -H -X POST \
+curl -v -H "Content-Type:application/json" -X POST \
 	--data-binary "@commits.bundle" http://localhost:3000/bundle/github.com/analogj/test/master
-	
+
 curl -L -v -H -X POST --data-binary "@commits.bundle" http://localhost:3000/bundle/github.com/analogj/test/master
+
+
+
+# WORKING!!
+curl -v -X POST \
+	--upload-file commits.bundle https://git.gitmask.com/beta/bundle/github.com/AnalogJ/tags_analogj_test/master
+curl -v -X PUT \
+	--upload-file commits.bundle "<PUT LOCATION URL HERE, IN QUOTES>"
+
 
 # Resources
 - https://git-scm.com/blog/2010/03/10/bundles.html

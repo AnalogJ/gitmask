@@ -103,7 +103,7 @@ functions:
     events:
     - http:
         path: bundle/{scm}/{org}/{repo}/{branch}
-        method: post
+        method: put
 #        response: ${self:custom.redirectResponse}
 #        integration: lambda
         cors: true
