@@ -28,3 +28,14 @@ http://www.businessinsider.com/joke-github-dicss-project-goes-nuts-2015-3
 https://github.com/letsgetrandy/brototype
 https://github.com/letsgetrandy/DICSS
 http://developers.slashdot.org/story/15/03/22/1748238/a-software-project-full-of-male-anatomy-jokes-causes-controversy
+
+
+
+
+# Examples
+git bundle create commits.bundle develop_branch..public_branch \
+&& curl -v -H "Content-Type:application/octet-stream" -X POST --data-binary "@commits.bundle" https://git.gitmask.com/beta/patch
+
+
+# Resources
+- https://git-scm.com/blog/2010/03/10/bundles.html

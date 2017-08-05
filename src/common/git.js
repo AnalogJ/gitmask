@@ -19,10 +19,6 @@ function cloneRepo(logger, token, repoOwner, repoName, destination, ref){
     if(ref){
         cmd = `git clone -b ${ref} --single-branch --depth 1 https://${token}:@github.com/${repoOwner}/${repoName} ${destination}`
     }
-
-    logger.info("Cloning repository with the following command.")
-    logger.info(cmd)
-    logger.info(JSON.stringify(process.env))
     exec(cmd, {
         env: process.env
     }, function(err, stdout, stderr) {
@@ -33,4 +29,21 @@ function cloneRepo(logger, token, repoOwner, repoName, destination, ref){
 }
 
 
+function applyBundle(logger, repoPath, bundlePath, bundleBranch){
+    var deferred = q.defer();
+
+    var cmd = `git clone --depth 1 https://${token}:@github.com/${repoOwner}/${repoName} ${destination}`
+    if(ref){
+        cmd = `git clone -b ${ref} --single-branch --depth 1 https://${token}:@github.com/${repoOwner}/${repoName} ${destination}`
+    }
+    exec(cmd, {
+        env: process.env
+    }, function(err, stdout, stderr) {
+        if (err) return deferred.reject(err);
+        return deferred.resolve(stdout)
+    });
+    return deferred.promise
+}
+
 module.exports.cloneRepo = cloneRepo
+module.exports.applyBundle = applyBundle

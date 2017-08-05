@@ -56,12 +56,16 @@ module.exports.handler = (event, context, callback) => {
             var tmpobj = tmp.dirSync();
 
             return git.cloneRepo(logger, nconf.get('GITHUB_API_TOKEN'), 'gitmask-anonymous', dest_repo, tmpobj.name, dest_ref)
-        })
-        .then(function(clone_stdout){
-            logger.info('Anonymizing and applying patches')
-        })
-        .then(function(){
-            logger.info('Pushing local changes up to github')
+                .then(function(){
+                    logger.info('Anonymizing and applying patches')
+
+                    logger.info(new Buffer(event.body, 'base64'))
+
+
+                })
+                .then(function(){
+                    logger.info('Pushing local changes up to github')
+                })
         })
         .then(function(){
             logger.info('Creating pull request with Ghost user')
@@ -78,6 +82,7 @@ module.exports.handler = (event, context, callback) => {
         .then(function(){
             return callback(null, logger.get());
         })
+
         .fail(function(err){
             logger.info("AN ERROR OCCURRED")
             logger.info(err)
