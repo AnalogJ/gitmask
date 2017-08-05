@@ -92,8 +92,8 @@ functions:
       - http:
           path: patch/{scm}/{org}/{repo}
           method: post
-          response: ${self:custom.standardResponses}
-          integration: lambda
+#          response: ${self:custom.standardResponses}
+#          integration: lambda
           request:
             passThrough: WHEN_NO_TEMPLATES
 
