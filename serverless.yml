@@ -28,6 +28,13 @@ provider:
     GITHUB_API_TOKEN: ${env:GITHUB_API_TOKEN}
     DEBUG: gitmask:*
 
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "s3:PutObject"
+        - "s3:GetObject"
+      Resource: "arn:aws:s3:::${self:service}-${opt:stage, self:provider.stage}-*"
+
 custom:
 
   # overridden from https://github.com/serverless/serverless/blob/03cc50b246c656183110669126a632735ea46b15/lib/plugins/aws/deploy/compile/events/apiGateway/lib/method/integration.js#L106-L140
@@ -56,6 +63,15 @@ custom:
           application/json: ${self:custom.errorResponseTemplate}
         pattern: '.*\[500\].*'
 
+#  redirectResponse:
+#    headers:
+#      Location: "integration.response.body.headers.Location"
+#      Content-Type: "'application/json'"
+#    statusCodes:
+#      307:
+#        pattern: ''
+#        template:
+#          application/json: "{}"
 
 # you can add packaging information here
 package:
@@ -73,8 +89,6 @@ package:
     - no
 
 functions:
-# UNAUTHENTICATED METHODS
-# TODO: we should re-enable this endpoint once serverless figures out how to get around 200 CF limit.
   version:
     handler: src/version.handler
     events:
@@ -84,20 +98,30 @@ functions:
           response: ${self:custom.standardResponses}
           integration: lambda
 
-  patch:
-    handler: src/patch.handler
-    timeout: 120
-    memorySize: 128
+  bundle:
+    handler: src/bundle.handler
     events:
-      - http:
-          path: patch/{scm}/{org}/{repo}
-          method: post
-#          response: ${self:custom.standardResponses}
-          integration: lambda
-          request:
-            passThrough: WHEN_NO_MATCH
-          contentHandling: CONVERT_TO_BINARY
+    - http:
+        path: bundle/{scm}/{org}/{repo}/{branch}
+        method: post
+#        response: ${self:custom.redirectResponse}
+#        integration: lambda
+        cors: true
+
+
+  # this process runs whenever a bundle is added to upload bucket.
+  # it will then parse the bundle, process it and create a new PR on github repo.
+  processbundle:
+    handler: src/process.handler
+    events:
+      - s3:
+          bucket: ${self:service}-${opt:stage, self:provider.stage}-upload
+          event: s3:ObjectCreated:*
+
+resources:
+  Resources:
+    $ref: ./cloudformation-resources.yaml
 
 plugins:
    - serverless-prune-plugin
-   - serverless-apigwy-binary
+   - serverless-offline
