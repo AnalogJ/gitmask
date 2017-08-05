@@ -19,8 +19,6 @@
 - magnumripper/JohnTheRipper
 - tor
 - bittorrent
-
-
 - http://www.eremedia.com/sourcecon/how-to-find-almost-any-github-users-email-address/
 - http://www.businessinsider.com/joke-github-dicss-project-goes-nuts-2015-3
 - https://github.com/letsgetrandy/brototype
