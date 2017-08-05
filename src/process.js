@@ -125,7 +125,16 @@ module.exports.handler = (event, context, callback) => {
                         repo: repo
                     })
                 })
+                .then(function(){
+                    callback(null, {})
+                })
+                .fail(function(err){
+                    debug("!!!!!!AN ERROR OCCURRED!!!!!!")
+                    debug(err)
+                    return callback(null, err)
+                })
         })
+
 
 
 
