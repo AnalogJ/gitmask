@@ -4,6 +4,7 @@ var nconf = require('./common/nconf')
 var q = require("q");  // npm install q
 var fs = require('fs');
 var crypto = require('crypto');
+var utils = require('/common/utils');
 
 var AWS = require('aws-sdk');
 var s3 = new AWS.S3({apiVersion: '2006-03-01'});
@@ -39,11 +40,11 @@ module.exports.handler = (event, context, callback) => {
     var upload_bucket = event.Records[0].s3.bucket.name;
     var upload_key_parts = upload_key.split('/');
     //ignore the userhash.h
-    var scm = upload_key_parts[0];
-    var org = upload_key_parts[1];
-    var repo = upload_key_parts[2];
-    var branch = upload_key_parts[3];
-    var bundle_id = upload_key_parts[4];
+    var scm = utils.normalizeInput(upload_key_parts[0]);
+    var org = utils.normalizeInput(upload_key_parts[1]);
+    var repo = utils.normalizeInput(upload_key_parts[2])
+    var branch = utils.normalizeInput(upload_key_parts[3])
+    var bundle_id = upload_key_parts[4]; //we control this part (and includes a '.' so dont normalize)
 
     var bundlePath = `/tmp/${bundle_id}`;
     var bundleLocalBranchName = `gitmask-bundle`; //this is the name of the branch containing all the commits before squashing.

@@ -4,6 +4,7 @@ var nconf = require('./common/nconf')
 var AWS = require('aws-sdk');
 var s3 = new AWS.S3({apiVersion: '2006-03-01'});
 var constants = require('./common/constants');
+var utils = require('./common/utils');
 var crypto = require('crypto');
 
 //this function generates a signed url for the upload bucket, which can be used by curl (calibre, web) to upload git bundle files to s3
@@ -19,14 +20,19 @@ module.exports.handler = (event, context, callback) => {
 
     var id = crypto.randomBytes(20).toString('hex');
 
+    var scm = utils.normalizeInput(event.pathParameters.scm);
+    var org = utils.normalizeInput(event.pathParameters.org);
+    var repo = utils.normalizeInput(event.pathParameters.repo);
+    var branch = utils.normalizeInput(event.pathParameters.branch)
+
     const response = {
         statusCode: 307,
         headers: {
             "Location": s3.getSignedUrl('putObject', {
                 Bucket: constants.buckets.upload,
-                Key: `${event.pathParameters.scm}/${event.pathParameters.org}/${event.pathParameters.repo}/${event.pathParameters.branch}/${id}.git.bundle`,
-                Expires: 60
-            }) // "https://requestb.in/yzm8fbyz"
+                Key: `${scm}/${org}/${repo}/${branch}/${id}.git.bundle`,
+                Expires: 60 //seconds
+            })
         },
         body: ""
     };
