@@ -1,0 +1,19 @@
+machine:
+  node:
+    version: 4.3.0
+
+dependencies:
+  override:
+    - npm install -g serverless
+    - npm install
+    - npm ls || true
+
+deployment:
+  deploy:
+    branch: [beta, master]
+    commands:
+      - cd opt && tar -xvf git-2.4.3.tar && rm -rf git-2.4.3.tar
+      - npm prune --production #prune node_modules directory to only contain production modules
+      - sls prune -n 4
+      - serverless deploy --stage $CIRCLE_BRANCH --region us-east-1
+      - aws s3api put-bucket-lifecycle-configuration  --bucket gitmask-api-${CIRCLE_BRANCH}-upload --lifecycle-configuration file://bucket.lifecycle.json

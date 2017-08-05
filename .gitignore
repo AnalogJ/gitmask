@@ -1,2 +1,6 @@
 /.idea
 container_settings.json
+/.serverless
+node_modules/
+package-lock.json
+/commits.bundle

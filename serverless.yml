@@ -1,0 +1,128 @@
+# Welcome to Serverless!
+#
+# This file is the main config file for your service.
+# It's very minimal at this point and uses default values.
+# You can always add more config options for more control.
+# We've included some commented out config examples here.
+# Just uncomment any of them to get that config option.
+#
+# For full config options, check the docs:
+#    v1.docs.serverless.com
+#
+# Happy Coding!
+
+service: gitmask-api # NOTE: update this with your service name
+
+provider:
+  cfLogs: true
+  name: aws
+  stage: 'beta'
+  region: us-east-1
+  timeout: 40 # optional, default is 6
+  runtime: nodejs4.3
+  memorySize: 128
+  environment:
+    DOMAIN: git.gitmask.com
+    DEPLOY_SHA: ${env:CIRCLE_SHA1}
+    STAGE: ${opt:stage, self:provider.stage}
+    NODE_ENV: production
+    GITHUB_API_TOKEN: ${env:GITHUB_API_TOKEN}
+    DEBUG: gitmask:*
+
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "s3:PutObject"
+        - "s3:GetObject"
+      Resource: "arn:aws:s3:::${self:service}-${opt:stage, self:provider.stage}-*"
+
+custom:
+
+  # overridden from https://github.com/serverless/serverless/blob/03cc50b246c656183110669126a632735ea46b15/lib/plugins/aws/deploy/compile/events/apiGateway/lib/method/integration.js#L106-L140
+  standardResponseTemplate: "{\"success\":true, \"data\": $input.json('$') }"
+  errorResponseTemplate: "#set($inputRoot = $input.path('$.errorMessage')){\"success\":false, \"error\": $inputRoot }"
+
+  standardResponses:
+    headers:
+      Content-Type: "'application/json'"
+    template: ${self:custom.standardResponseTemplate}
+    statusCodes:
+      200:
+        pattern: ''
+        template:
+          application/json: ${self:custom.standardResponseTemplate}
+      400:
+        template:
+          application/json: ${self:custom.errorResponseTemplate}
+        pattern: '.*\[400\].*'
+      404:
+        template:
+          application/json: ${self:custom.errorResponseTemplate}
+        pattern: '.*\[404\].*'
+      500:
+        template:
+          application/json: ${self:custom.errorResponseTemplate}
+        pattern: '.*\[500\].*'
+
+#  redirectResponse:
+#    headers:
+#      Location: "integration.response.body.headers.Location"
+#      Content-Type: "'application/json'"
+#    statusCodes:
+#      307:
+#        pattern: ''
+#        template:
+#          application/json: "{}"
+
+# you can add packaging information here
+package:
+#  individually: true # required for https://github.com/FidelLimited/serverless-plugin-optimize
+  # only the following paths will be included in the resulting artifact which will be uploaded. Without specific include everything in the current folder will be included
+  include:
+    - src
+    - functions
+    - opt
+  # The following paths will be excluded from the resulting artifact. If both include and exclude are defined we first apply the include, then the exclude so files are guaranteed to be excluded
+  exclude:
+    - tmp
+    - .git
+    - .idea
+    - no
+
+functions:
+  version:
+    handler: src/version.handler
+    events:
+      - http:
+          path: version
+          method: get
+          response: ${self:custom.standardResponses}
+          integration: lambda
+
+  bundle:
+    handler: src/bundle.handler
+    events:
+    - http:
+        path: bundle/{scm}/{org}/{repo}/{branch}
+        method: put
+#        response: ${self:custom.redirectResponse}
+#        integration: lambda
+        cors: true
+
+
+  # this process runs whenever a bundle is added to upload bucket.
+  # it will then parse the bundle, process it and create a new PR on github repo.
+  processbundle:
+    handler: src/process.handler
+    events:
+      - s3:
+          bucket: ${self:service}-${opt:stage, self:provider.stage}-upload
+          event: s3:ObjectCreated:*
+
+resources:
+  Resources:
+    $ref: ./cloudformation-resources.yaml
+
+plugins:
+   - serverless-prune-plugin
+   - serverless-offline

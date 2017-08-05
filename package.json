@@ -1,0 +1,27 @@
+{
+  "name": "gitmask.api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "serverless.yml",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AnalogJ/gitmask.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AnalogJ/gitmask/issues"
+  },
+  "homepage": "https://github.com/AnalogJ/gitmask#readme",
+  "dependencies": {
+    "aws-sdk": "^2.72.0",
+    "debug": "^2.6.3",
+    "github": "^9.2.0",
+    "nconf": "^0.8.4",
+    "q": "^1.5.0",
+    "serverless-prune-plugin": "^1.0.4",
+    "serverless-offline": "^3.15.3",
+    "tmp": "0.0.31"
+  }
+}

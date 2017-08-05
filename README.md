@@ -28,3 +28,38 @@ http://www.businessinsider.com/joke-github-dicss-project-goes-nuts-2015-3
 https://github.com/letsgetrandy/brototype
 https://github.com/letsgetrandy/DICSS
 http://developers.slashdot.org/story/15/03/22/1748238/a-software-project-full-of-male-anatomy-jokes-causes-controversy
+
+
+
+
+# Examples
+git bundle create commits.bundle origin/public_branch..local_branch \
+&& curl -v -H "Content-Type:application/x-binary" -X POST \
+	--data-binary "@commits.bundle" https://git.gitmask.com/beta/patch/github.com/AnalogJ/tags_analogj_test
+
+curl -L -H "Content-Type:application/json" -v -X POST \
+	--data-binary "@commits.bundle" https://git.gitmask.com/beta/bundle/github.com/AnalogJ/tags_analogj_test/master
+
+curl -v -H "Content-Type:application/json" -X POST \
+	--data-binary "@commits.bundle" http://localhost:3000/bundle/github.com/analogj/test/master
+
+curl -L -v -H -X POST --data-binary "@commits.bundle" http://localhost:3000/bundle/github.com/analogj/test/master
+
+
+
+# WORKING!! 2 Step
+curl -v -X PUT \
+	--upload-file commits.bundle https://git.gitmask.com/beta/bundle/github.com/AnalogJ/tags_analogj_test/master
+curl -v -X PUT \
+	--upload-file commits.bundle "<PUT LOCATION URL HERE, IN QUOTES>"
+
+# WORKING 1 STEP
+
+curl -v -L -X PUT \
+	--upload-file commits.bundle https://git.gitmask.com/beta/bundle/github.com/AnalogJ/tags_analogj_test/master
+
+docker run -it --entrypoint "" -v "$PWD":/var/task lambci/lambda /bin/bash
+
+
+# Resources
+- https://git-scm.com/blog/2010/03/10/bundles.html
