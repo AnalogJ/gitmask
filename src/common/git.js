@@ -52,6 +52,7 @@ function execGitCmd(cmd, cwd, env){
 
     var deferred = q.defer();
     exec(cmd, opts, function(err, stdout, stderr) {
+        console.log(" >> STDERR:", stderr)
         if (err) return deferred.reject(err);
         return deferred.resolve(stdout)
     });

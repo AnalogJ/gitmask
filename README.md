@@ -58,6 +58,7 @@ curl -v -X PUT \
 curl -v -L -X PUT \
 	--upload-file commits.bundle https://git.gitmask.com/beta/bundle/github.com/AnalogJ/tags_analogj_test/master
 
+docker run -it -v "$PWD":/var/task lambci/lambda /bin/bash
 
 
 # Resources
