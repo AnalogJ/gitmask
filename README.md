@@ -47,11 +47,17 @@ curl -L -v -H -X POST --data-binary "@commits.bundle" http://localhost:3000/bund
 
 
 
-# WORKING!!
-curl -v -X POST \
+# WORKING!! 2 Step
+curl -v -X PUT \
 	--upload-file commits.bundle https://git.gitmask.com/beta/bundle/github.com/AnalogJ/tags_analogj_test/master
 curl -v -X PUT \
 	--upload-file commits.bundle "<PUT LOCATION URL HERE, IN QUOTES>"
+
+# WORKING 1 STEP
+
+curl -v -L -X PUT \
+	--upload-file commits.bundle https://git.gitmask.com/beta/bundle/github.com/AnalogJ/tags_analogj_test/master
+
 
 
 # Resources
