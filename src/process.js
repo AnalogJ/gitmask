@@ -4,7 +4,7 @@ var nconf = require('./common/nconf')
 var q = require("q");  // npm install q
 var fs = require('fs');
 var crypto = require('crypto');
-var utils = require('/common/utils');
+var utils = require('./common/utils');
 
 var AWS = require('aws-sdk');
 var s3 = new AWS.S3({apiVersion: '2006-03-01'});
