@@ -99,6 +99,7 @@ module.exports.handler = (event, context, callback) => {
                     return git.bundleBranchName(bundlePath);
                 })
                 .then(function(bundleBranchName){
+                    bundleBranchName = bundleBranchName.trim();
                     debug('Found bundle branch name', bundleBranchName)
 
                     debug('Fetch the bundled commits into local repository')

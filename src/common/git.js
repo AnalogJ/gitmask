@@ -17,7 +17,7 @@ module.exports.cloneRepo = function(gitRemote, destination){
 }
 
 module.exports.validateBundle = function(repoPath, bundlePath){
-    // return execGitCmd(`git bundle verify ${bundlePath}`, repoPath)
+    return execGitCmd(`git bundle verify ${bundlePath}`, repoPath)
 }
 
 module.exports.bundleBranchName = function(bundlePath){
