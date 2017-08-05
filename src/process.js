@@ -45,8 +45,11 @@ module.exports.handler = (event, context, callback) => {
     var branch = upload_key_parts[3];
     var bundle_id = upload_key_parts[4];
 
-    var bundlePath = `/tmp/${bundle_id}`
-    var localBranchName = `gitmask-${crypto.randomBytes(10).toString('hex')}`
+    var bundlePath = `/tmp/${bundle_id}`;
+    var bundleLocalBranchName = `gitmask-bundle`; //this is the name of the branch containing all the commits before squashing.
+    var anonLocalBranchName = `gitmask-${crypto.randomBytes(10).toString('hex')}` //this is the squashed and anonymized branch that we push
+
+
 
     var gitmask_org = 'gitmask-anonymous'
 
@@ -103,21 +106,24 @@ module.exports.handler = (event, context, callback) => {
                     debug('Found bundle branch name', bundleBranchName)
 
                     debug('Fetch the bundled commits into local repository')
-                    return git.fetchBundleCommits(tmpobj.name, bundlePath, bundleBranchName, localBranchName)
+                    return git.fetchBundleCommits(tmpobj.name, bundlePath, bundleBranchName, bundleLocalBranchName)
                 })
                 .then(function(){
                     debug('Checkout the new branch')
-                    return git.checkoutBranch(tmpobj.name, localBranchName)
+                    return git.checkoutBranch(tmpobj.name, bundleLocalBranchName)
                 })
                 .then(function(){
                     debug('Squash the commits')
                     //TODO: NEED TO SQUASH AND ANONYMIZE PRS.
                     //TODO: https://stackoverflow.com/a/616766/1157633
 
+
+                    return git.squashCommits(tmpobj.name, branch, anonLocalBranchName, bundleLocalBranchName)
+
                 })
                 .then(function(){
-                    debug('Push the local branch up to forked repository')
-                    return git.pushRepo(tmpobj.name, localBranchName)
+                    debug('Push the anonymized local branch up to forked repository')
+                    return git.pushRepo(tmpobj.name, anonLocalBranchName)
                 })
                 .then(function(){
                     debug('Open a PR against dest repository, destination branch');
@@ -125,7 +131,7 @@ module.exports.handler = (event, context, callback) => {
                         owner: org,
                         repo: repo,
                         title: 'Gitmask Anonymous PR',
-                        head: `${gitmask_org}:${localBranchName}`,
+                        head: `${gitmask_org}:${anonLocalBranchName}`,
                         base: branch,
                         body: `This is an anonymous PR submitted via Gitmask - https://www.gitmask.com`
 

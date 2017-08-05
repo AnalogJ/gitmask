@@ -28,14 +28,36 @@ module.exports.fetchBundleCommits = function(repoPath, bundlePath, bundleBranchN
     return execGitCmd(`git fetch ${bundlePath} ${bundleBranchName}:${localBranchName}`, repoPath)
 }
 
-module.exports.checkoutBranch = function(repoPath, branchName){
+module.exports.checkoutBranch = function checkoutBranch(repoPath, branchName){
     return execGitCmd(`git checkout ${branchName}`, repoPath)
 }
 
+module.exports.squashCommits = function(repoPath, destBranchName, squashedBranchName, bundleBranchName){
+    //create a new squashedBranch, which is based off the destBranch.
+    return execGitCmd(`git checkout -b ${squashedBranchName} ${destBranchName}`, repoPath)
+        .then(function(){
+            //now lets merge (and squash) the commits from the git bundle.
+            return execGitCmd(`git merge --squash ${bundleBranchName}`, repoPath);
+        })
+        .then(function(){
+            //merge --squash doesn't actually create a commmit, so we need to do that here.
+            // we also need to set the commiter and author
+            process.env.GIT_COMMITTER_NAME = "ghost";
+            process.env.GIT_COMMITTER_EMAIL = "ghost@users.noreply.github.com";
+            process.env.GIT_AUTHOR_NAME = "ghost";
+            process.env.GIT_AUTHOR_EMAIL = "ghost@users.noreply.github.com";
+
+            return execGitCmd(`git commit -am "anonymous commit"`, repoPath, process.env)
+        })
+
+
+    return execGitCmd(`git push origin ${branchName}`, repoPath)
+}
 
 module.exports.pushRepo = function(repoPath, branchName){
     return execGitCmd(`git push origin ${branchName}`, repoPath)
 }
+
 
 
 function execGitCmd(cmd, cwd, env){

@@ -33,7 +33,7 @@ http://developers.slashdot.org/story/15/03/22/1748238/a-software-project-full-of
 
 
 # Examples
-git bundle create commits.bundle public_branch..local_branch \
+git bundle create commits.bundle origin/public_branch..local_branch \
 && curl -v -H "Content-Type:application/x-binary" -X POST \
 	--data-binary "@commits.bundle" https://git.gitmask.com/beta/patch/github.com/AnalogJ/tags_analogj_test
 
