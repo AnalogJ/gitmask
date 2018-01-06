@@ -24,3 +24,5 @@
 - https://github.com/letsgetrandy/brototype
 - https://github.com/letsgetrandy/DICSS
 - http://developers.slashdot.org/story/15/03/22/1748238/a-software-project-full-of-male-anatomy-jokes-causes-controversy
+update readme
+am I really anonymous?
