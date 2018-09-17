@@ -5,14 +5,15 @@
 # https://github.com/serverless/serverless/issues/2967
 # https://serverless.com/framework/docs/providers/aws/guide/resources/#aws-cloudformation-resource-reference
 
-#S3BucketGitmaskapi:
+# This will be automatically generated from serverless.yaml.
+#S3Bucket${env:GITMASK_SERVICE_NORMALIZE, 'Gitmaskapi'}:
 #  Type: AWS::S3::Bucket
 #  Properties:
 #    BucketName: "${self:service}-${opt:stage, self:provider.stage}-upload"
 
 
 GitmaskUploadBucketPolicy:
-  DependsOn: "S3BucketGitmaskapi${opt:stage, self:provider.stage}upload"
+  DependsOn: "S3Bucket${env:GITMASK_SERVICE_NORMALIZE, 'Gitmaskapi'}${opt:stage, self:provider.stage}upload"
   Type: AWS::S3::BucketPolicy
   Properties:
     PolicyDocument:
@@ -27,7 +28,7 @@ GitmaskUploadBucketPolicy:
           Fn::Join:
           - ''
           - - 'arn:aws:s3:::'
-            - Ref: "S3BucketGitmaskapi${opt:stage, self:provider.stage}upload"
+            - Ref: "S3Bucket${env:GITMASK_SERVICE_NORMALIZE, 'Gitmaskapi'}${opt:stage, self:provider.stage}upload"
             - "/*"
     Bucket:
-      Ref: "S3BucketGitmaskapi${opt:stage, self:provider.stage}upload"
+      Ref: "S3Bucket${env:GITMASK_SERVICE_NORMALIZE, 'Gitmaskapi'}${opt:stage, self:provider.stage}upload"

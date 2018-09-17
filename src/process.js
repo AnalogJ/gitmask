@@ -52,7 +52,7 @@ module.exports.handler = (event, context, callback) => {
 
 
 
-    var gitmask_org = 'gitmask-anonymous'
+    var gitmask_org = nconf.get('GITHUB_USER')
 
     debug("Begin processing bundle: ", upload_key_parts);
 

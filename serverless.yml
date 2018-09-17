@@ -11,7 +11,7 @@
 #
 # Happy Coding!
 
-service: gitmask-api # NOTE: update this with your service name
+service: ${env:GITMASK_SERVICE, 'gitmask-api'} # NOTE: update this with your service name
 
 provider:
   cfLogs: true
@@ -22,10 +22,12 @@ provider:
   runtime: nodejs4.3
   memorySize: 128
   environment:
+    GITMASK_SERVICE: ${self:service}
     DOMAIN: git.gitmask.com
     DEPLOY_SHA: ${env:CIRCLE_SHA1}
     STAGE: ${opt:stage, self:provider.stage}
     NODE_ENV: production
+    GITHUB_USER: ${env:GITHUB_USER, 'gitmask-anonymous'}
     GITHUB_API_TOKEN: ${env:GITHUB_API_TOKEN}
     DEBUG: gitmask:*
 
