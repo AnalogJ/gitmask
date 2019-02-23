@@ -30,3 +30,55 @@
  * [Anonymous Github](https://github.com/tdurieux/anonymous_github) is a proxy server to support anonymous browsing of Github repositories for open-science code and data.
 
  * [blind-reviews](https://github.com/zombie/blind-reviews/) hides the name of a pull request submitter in the browser, to help maintainers break bias habits and take a first look at the code on its own merits. (It does not change the identifying information.)
+
+# How to run gitmask in your serverless environment
+
+For testing purpose, so on.
+
+## Prerequisites
+
+* AWS account where your gitmask run.
+* Install nodejs, serverless-framework and aws-cli.
+    * https://nodejs.org/
+    * https://serverless.com/
+    * https://aws.amazon.com/cli/
+
+## Steps to run gitmask
+
+1. Create and setup the AWS user for the deployment.
+
+     * Set up the credentials with `aws configure`
+     * You may use the AWS account root user.
+     * You can create a new IAM user with restrict permissions.
+        * https://serverless.com/blog/abcs-of-iam-permissions/ may help you.
+
+2. Issue your github access token
+
+    * Go to github Settings > Developer settings > Personal access tokens
+    * Run generate new token
+        * scopes
+            * public_repo
+
+3. Configure following environment variables:
+
+    |Variable                 |Value  |
+    |:------------------------|:-------------|
+    |GITHUB_API_TOKEN         |github personal access token|
+    |GITHUB_USER              |github username of the personal access token|
+    |GITMASK_SERVICE          |Your own service name for gitmask, e.g. myown-gitmask-api.|
+    |GITMASK_SERVICE_NORMALIZE|Normalized value for GITMASK_SERVICE,removing special characters and captalize the first letter. e.g. Myowngitmaskapi |
+    |CIRCLE_SHA1              |Set the value retrieved by `git rev-parse --short HEAD`|
+
+4. Run deployment
+
+    ```
+    sls deploy
+    ```
+
+    * The URLs for endpoints are shown.
+        * You can redisplay that with `sls info`
+
+### To remove the deployment
+
+You can uninstall the deployment with `sls remove`.
+You have to have the S3 bucket (GITMASK_SERVICE)-(stage)-upload empty in advance.
