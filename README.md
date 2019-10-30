@@ -1,4 +1,22 @@
+<p align="center">
+  <a href="https://github.com/AnalogJ/gitmask">
+  <img width="300" alt="gitmask_view" src="https://rawgit.com/AnalogJ/gitmask/master/docs/noun_hacker_2481442.png">
+  </a>
+</p>
+
+# Gitmask
+
+
+
+# Logo
+
+[hacker icon designed by sultan mohammed](https://thenounproject.com/term/hacker/2481442)
+
+----
+
 # Resources
+
+
 
 - http://weininger.net/configuration-of-nginx-for-gitweb-and-git-http-backend.html
 - https://gist.github.com/massar/9399764
