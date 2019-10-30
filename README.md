@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://github.com/AnalogJ/gitmask">
-  <img width="300" alt="gitmask_view" src="https://rawgit.com/AnalogJ/gitmask/master/docs/noun_hacker_2481442.png">
+  <img width="300" alt="gitmask_view" src="https://github.com/AnalogJ/gitmask/raw/beta/docs/noun_hacker_2481442.png">
   </a>
 </p>
 
