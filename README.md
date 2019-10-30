@@ -4,7 +4,19 @@
   </a>
 </p>
 
-# Gitmask
+# Gitmask **Work-In-Progress**
+
+
+
+# Goals for V2
+
+- ability to use gitmask as a remote, rather than requiring bundles to use it.
+    - https://github.com/substack/git-http-backend
+    - https://git-scm.com/book/no-nb/v1/Git-Internals-Transfer-Protocols
+    - https://git-scm.com/book/en/v2/Git-on-the-Server-The-Protocols
+- Can we use a Github App to handle fork & PR creation, rather than using a "Github Anonymous" user?
+- We should show progress logs to users, showing them whats going on with the PR, and the current status/error w/ a link
+- ** FUTURE ** ability for users to anonymously make comments on a PR or make follow up commits? one time API token on every push?
 
 
 
