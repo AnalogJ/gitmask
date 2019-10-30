@@ -12,6 +12,8 @@
 
 - ability to use gitmask as a remote, rather than requiring bundles to use it.
     - https://github.com/substack/git-http-backend
+    - https://github.com/asim/git-http-backend
+    - https://github.com/dvdotsenko/git_http_backend.py
     - https://git-scm.com/book/no-nb/v1/Git-Internals-Transfer-Protocols
     - https://git-scm.com/book/en/v2/Git-on-the-Server-The-Protocols
 - Can we use a Github App to handle fork & PR creation, rather than using a "Github Anonymous" user?
