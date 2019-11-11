@@ -14,12 +14,13 @@
 service: ${env:GITMASK_SERVICE, 'gitmask-api'} # NOTE: update this with your service name
 
 provider:
+  logRetentionInDays: 60
   cfLogs: true
   name: aws
   stage: 'beta'
   region: us-east-1
   timeout: 40 # optional, default is 6
-  runtime: nodejs4.3
+  runtime: nodejs10.x
   memorySize: 128
   environment:
     GITMASK_SERVICE: ${self:service}
@@ -39,6 +40,26 @@ provider:
       Resource: "arn:aws:s3:::${self:service}-${opt:stage, self:provider.stage}-*"
 
 custom:
+  variables:
+    master:
+      cleanup_enabled: true
+      debug: ''
+      api_path: ''
+    beta:
+      cleanup_enabled: false
+      debug: gitmask:*
+      api_path: 'beta'
+    local:
+      cleanup_enabled: false
+      debug: gitmask:*
+      api_path: 'local'
+
+  customDomain:
+    domainName: git.gitmask.com
+    basePath: ${self:custom.variables.${opt:stage, self:provider.stage}.api_path}
+    stage: ${self:provider.stage}
+    createRoute53Record: false
+
 
   # overridden from https://github.com/serverless/serverless/blob/03cc50b246c656183110669126a632735ea46b15/lib/plugins/aws/deploy/compile/events/apiGateway/lib/method/integration.js#L106-L140
   standardResponseTemplate: "{\"success\":true, \"data\": $input.json('$') }"
@@ -127,3 +148,5 @@ resources:
 plugins:
    - serverless-prune-plugin
    - serverless-offline
+   - serverless-domain-manager
+
