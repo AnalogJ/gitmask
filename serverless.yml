@@ -101,25 +101,24 @@ functions:
           response: ${self:custom.standardResponses}
           integration: lambda
 
-  bundle:
-    handler: src/bundle.handler
+# V2 Backend Methods
+  git-receive-pack:
+    handler: src/git-receive-pack.handler
     events:
-    - http:
-        path: bundle/{scm}/{org}/{repo}/{branch}
-        method: put
-#        response: ${self:custom.redirectResponse}
-#        integration: lambda
-        cors: true
-
-
-  # this process runs whenever a bundle is added to upload bucket.
-  # it will then parse the bundle, process it and create a new PR on github repo.
-  processbundle:
-    handler: src/process.handler
+      - http:
+          # https://beta.gitmask.com/gh/AnalogJ/capsulecd.git
+          path: {scm}/{org}/{repo}.git/git-receive-pack
+          method: post
+          cors: true
+  git-upload-pack:
+    handler: src/git-upload-pack.handler
     events:
-      - s3:
-          bucket: ${self:service}-${opt:stage, self:provider.stage}-upload
-          event: s3:ObjectCreated:*
+      - http:
+          # https://beta.gitmask.com/gh/AnalogJ/capsulecd.git
+          path: {scm}/{org}/{repo}.git/git-upload-pack
+          method: post
+          cors: true
+
 
 resources:
   Resources:
