@@ -11,24 +11,24 @@
 #  Properties:
 #    BucketName: "${self:service}-${opt:stage, self:provider.stage}-upload"
 
-
-GitmaskUploadBucketPolicy:
-  DependsOn: "S3Bucket${env:GITMASK_SERVICE_NORMALIZE, 'Gitmaskapi'}${opt:stage, self:provider.stage}upload"
-  Type: AWS::S3::BucketPolicy
-  Properties:
-    PolicyDocument:
-      Id: Grant access readonly access to public users
-      Statement:
-      - Sid: PublicReadPerms
-        Effect: Allow
-        Principal: "*"
-        Action:
-        - s3:GetObject
-        Resource:
-          Fn::Join:
-          - ''
-          - - 'arn:aws:s3:::'
-            - Ref: "S3Bucket${env:GITMASK_SERVICE_NORMALIZE, 'Gitmaskapi'}${opt:stage, self:provider.stage}upload"
-            - "/*"
-    Bucket:
-      Ref: "S3Bucket${env:GITMASK_SERVICE_NORMALIZE, 'Gitmaskapi'}${opt:stage, self:provider.stage}upload"
+#
+#GitmaskUploadBucketPolicy:
+#  DependsOn: "S3Bucket${env:GITMASK_SERVICE_NORMALIZE, 'Gitmaskapi'}${opt:stage, self:provider.stage}upload"
+#  Type: AWS::S3::BucketPolicy
+#  Properties:
+#    PolicyDocument:
+#      Id: Grant access readonly access to public users
+#      Statement:
+#      - Sid: PublicReadPerms
+#        Effect: Allow
+#        Principal: "*"
+#        Action:
+#        - s3:GetObject
+#        Resource:
+#          Fn::Join:
+#          - ''
+#          - - 'arn:aws:s3:::'
+#            - Ref: "S3Bucket${env:GITMASK_SERVICE_NORMALIZE, 'Gitmaskapi'}${opt:stage, self:provider.stage}upload"
+#            - "/*"
+#    Bucket:
+#      Ref: "S3Bucket${env:GITMASK_SERVICE_NORMALIZE, 'Gitmaskapi'}${opt:stage, self:provider.stage}upload"

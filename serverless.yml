@@ -32,12 +32,12 @@ provider:
     GITHUB_API_TOKEN: ${env:GITHUB_API_TOKEN}
     DEBUG: gitmask:*
 
-  iamRoleStatements:
-    - Effect: "Allow"
-      Action:
-        - "s3:PutObject"
-        - "s3:GetObject"
-      Resource: "arn:aws:s3:::${self:service}-${opt:stage, self:provider.stage}-*"
+#  iamRoleStatements:
+#    - Effect: "Allow"
+#      Action:
+#        - "s3:PutObject"
+#        - "s3:GetObject"
+#      Resource: "arn:aws:s3:::${self:service}-${opt:stage, self:provider.stage}-*"
 
 custom:
   variables:
@@ -141,9 +141,9 @@ functions:
           cors: true
 
 
-resources:
-  Resources:
-    $ref: ./cloudformation-resources.yaml
+#resources:
+#  Resources:
+#    $ref: ./cloudformation-resources.yaml
 
 plugins:
    - serverless-prune-plugin
