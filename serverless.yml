@@ -101,13 +101,13 @@ functions:
           response: ${self:custom.standardResponses}
           integration: lambda
 
-# V2 Backend Methods
+  # V2 Backend Methods
   git-receive-pack:
     handler: src/git-receive-pack.handler
     events:
       - http:
           # https://beta.gitmask.com/gh/AnalogJ/capsulecd.git
-          path: {scm}/{org}/{repo}.git/git-receive-pack
+          path: '{scm}/{org}/{repo}.git/git-receive-pack'
           method: post
           cors: true
   git-upload-pack:
@@ -115,7 +115,7 @@ functions:
     events:
       - http:
           # https://beta.gitmask.com/gh/AnalogJ/capsulecd.git
-          path: {scm}/{org}/{repo}.git/git-upload-pack
+          path: '{scm}/{org}/{repo}.git/git-upload-pack'
           method: post
           cors: true
 
