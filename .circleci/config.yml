@@ -56,7 +56,7 @@ jobs:
       - run:
           name: Deploy
           command: |
-            pushd opt && tar -xvf git-2.4.3.tar && rm -rf git-2.4.3.tar && popd
+            # pushd opt && tar -xvf git-2.4.3.tar && rm -rf git-2.4.3.tar && popd
             npm prune --production #prune node_modules directory to only contain production modules
 
             serverless prune -n 4

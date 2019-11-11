@@ -111,6 +111,7 @@ package:
     - .git
     - .idea
     - no
+    - opt
 
 functions:
   version:
