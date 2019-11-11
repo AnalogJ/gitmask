@@ -97,5 +97,3 @@ workflows:
               only:
                 - master
                 - beta
-
-
