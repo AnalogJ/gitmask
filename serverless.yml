@@ -40,6 +40,11 @@ provider:
 #      Resource: "arn:aws:s3:::${self:service}-${opt:stage, self:provider.stage}-*"
 
 custom:
+  apigwBinary:
+    types:           #list of mime-types
+      - 'application/x-git-receive-pack-request'
+      - 'application/x-git-receive-pack-result'
+
   variables:
     master:
       cleanup_enabled: true
@@ -124,6 +129,15 @@ functions:
           integration: lambda
 
   # V2 Backend Methods
+  git-info-refs:
+    handler: src/git-info-refs.handler
+    events:
+      - http:
+          # https://beta.gitmask.com/gh/AnalogJ/capsulecd.git
+          path: gh/{org}/{repo}/info/refs
+          method: get
+          cors: true
+
   git-receive-pack:
     handler: src/git-receive-pack.handler
     events:
@@ -132,14 +146,7 @@ functions:
           path: gh/{org}/{repo}/git-receive-pack
           method: post
           cors: true
-  git-upload-pack:
-    handler: src/git-upload-pack.handler
-    events:
-      - http:
-          # https://beta.gitmask.com/gh/AnalogJ/capsulecd.git
-          path: gh/{org}/{repo}/git-upload-pack
-          method: post
-          cors: true
+          contentHandling: CONVERT_TO_BINARY
 
 
 #resources:
@@ -150,4 +157,6 @@ plugins:
    - serverless-prune-plugin
    - serverless-offline
    - serverless-domain-manager
+   - serverless-apigw-binary
+   - serverless-apigwy-binary
 

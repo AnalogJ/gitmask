@@ -18,11 +18,16 @@
     "aws-sdk": "^2.72.0",
     "debug": "^2.6.3",
     "github": "^9.2.0",
+    "isomorphic-git": "^0.70.5",
     "nconf": "^0.8.4",
     "q": "^1.5.0",
-    "serverless-prune-plugin": "^1.0.4",
-    "serverless-offline": "^3.15.3",
+    "serverless-apigwy-binary": "^1.0.0",
     "serverless-domain-manager": "^3.2.2",
+    "serverless-offline": "^3.15.3",
+    "serverless-prune-plugin": "^1.0.4",
     "tmp": "0.0.31"
+  },
+  "devDependencies": {
+    "serverless-apigw-binary": "^0.4.4"
   }
 }

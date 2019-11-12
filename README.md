@@ -16,6 +16,15 @@
     - https://github.com/dvdotsenko/git_http_backend.py
     - https://git-scm.com/book/no-nb/v1/Git-Internals-Transfer-Protocols
     - https://git-scm.com/book/en/v2/Git-on-the-Server-The-Protocols
+    - https://github.com/git/git/blob/master/Documentation/technical/http-protocol.txt
+    - https://git-scm.com/book/en/v2/Git-Internals-Transfer-Protocols
+    - https://scottchacon.com/2010/03/04/smart-http.html
+    - https://github.com/schacon/grack/blob/master/lib/grack.rb
+    - https://mincong-h.github.io/2018/05/04/git-and-http/
+    - https://github.com/isomorphic-git/isomorphic-git/
+    - https://github.com/gabrielcsapo/node-git-server
+    - https://www.michaelfcollins3.me/blog/2012/05/18/implementing-a-git-http-server.html
+
 - Can we use a Github App to handle fork & PR creation, rather than using a "Github Anonymous" user?
 - We should show progress logs to users, showing them whats going on with the PR, and the current status/error w/ a link
 - ** FUTURE ** ability for users to anonymously make comments on a PR or make follow up commits? one time API token on every push?
