@@ -22,12 +22,10 @@
     "nconf": "^0.8.4",
     "q": "^1.5.0",
     "serverless-apigwy-binary": "^1.0.0",
+    "serverless-apigw-binary": "^0.4.4",
     "serverless-domain-manager": "^3.2.2",
     "serverless-offline": "^3.15.3",
     "serverless-prune-plugin": "^1.0.4",
     "tmp": "0.0.31"
-  },
-  "devDependencies": {
-    "serverless-apigw-binary": "^0.4.4"
   }
 }
