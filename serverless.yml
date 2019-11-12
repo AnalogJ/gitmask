@@ -32,6 +32,10 @@ provider:
     GITHUB_API_TOKEN: ${env:GITHUB_API_TOKEN}
     DEBUG: gitmask:*
 
+  apiGateway:
+    binaryMediaTypes:
+      - '*/*'
+
 #  iamRoleStatements:
 #    - Effect: "Allow"
 #      Action:
