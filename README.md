@@ -24,7 +24,14 @@
     - https://github.com/isomorphic-git/isomorphic-git/
     - https://github.com/gabrielcsapo/node-git-server
     - https://www.michaelfcollins3.me/blog/2012/05/18/implementing-a-git-http-server.html
-
+    - https://github.com/dulwich/dulwich/blob/aa73abcedb98ac469db645c4ac43ce2c2c6dd45f/dulwich/server.py#L893
+    - https://github.com/creationix/js-git/issues/3
+    - https://github.com/maxogden/git-side-band-message
+    - https://github.com/nhynes/git-angler/blob/master/lib/git_http_backend.js
+    - https://stackoverflow.com/questions/21833870/how-do-i-shallow-clone-a-repo-on-a-specific-branch
+    - https://github.com/lambci/git-lambda-layer
+    - https://github.com/serverless/serverless/blob/master/docs/providers/aws/guide/layers.md#using-your-layers
+    
 - Can we use a Github App to handle fork & PR creation, rather than using a "Github Anonymous" user?
 - We should show progress logs to users, showing them whats going on with the PR, and the current status/error w/ a link
 - ** FUTURE ** ability for users to anonymously make comments on a PR or make follow up commits? one time API token on every push?
