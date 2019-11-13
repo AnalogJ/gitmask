@@ -31,6 +31,7 @@
     - https://stackoverflow.com/questions/21833870/how-do-i-shallow-clone-a-repo-on-a-specific-branch
     - https://github.com/lambci/git-lambda-layer
     - https://github.com/serverless/serverless/blob/master/docs/providers/aws/guide/layers.md#using-your-layers
+    - https://github.com/Sneezoo/git-hapi-backend
     
 - Can we use a Github App to handle fork & PR creation, rather than using a "Github Anonymous" user?
 - We should show progress logs to users, showing them whats going on with the PR, and the current status/error w/ a link
