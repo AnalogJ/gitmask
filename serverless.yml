@@ -125,14 +125,13 @@ package:
 functions:
   version:
     handler: src/version.handler
-    layers:
-      - arn:aws:lambda:us-east-1:553035198032:layer:git-lambda2:2
+#    layers:
+#      - arn:aws:lambda:us-east-1:553035198032:layer:git-lambda2:2
     events:
       - http:
           path: version
           method: get
-          response: ${self:custom.standardResponses}
-          integration: lambda
+          cors: true
 
   # V2 Backend Methods
   git-info-refs:
