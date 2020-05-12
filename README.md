@@ -32,7 +32,8 @@
     - https://github.com/lambci/git-lambda-layer
     - https://github.com/serverless/serverless/blob/master/docs/providers/aws/guide/layers.md#using-your-layers
     - https://github.com/Sneezoo/git-hapi-backend
-    
+    - https://github.com/kisonecat/node-git-core
+    - https://github.com/chrisdickinson/git-packfile
 - Can we use a Github App to handle fork & PR creation, rather than using a "Github Anonymous" user?
 - We should show progress logs to users, showing them whats going on with the PR, and the current status/error w/ a link
 - ** FUTURE ** ability for users to anonymously make comments on a PR or make follow up commits? one time API token on every push?
