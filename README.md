@@ -34,6 +34,13 @@
     - https://github.com/Sneezoo/git-hapi-backend
     - https://github.com/kisonecat/node-git-core
     - https://github.com/chrisdickinson/git-packfile
+    - https://codewords.recurse.com/issues/three/unpacking-git-packfiles
+    - https://git-scm.com/docs/pack-format
+    - https://github.com/sosedoff/gitkit
+    - https://github.com/git/git/blob/master/builtin/receive-pack.c
+    - https://github.com/go-git/go-git/blob/c9533a6f9f3a6edd0fb7c8c161d4016a6af26bc3/storage/filesystem/dotgit/dotgit.go
+    - https://github.com/dulwich/dulwich
+
 - Can we use a Github App to handle fork & PR creation, rather than using a "Github Anonymous" user?
 - We should show progress logs to users, showing them whats going on with the PR, and the current status/error w/ a link
 - ** FUTURE ** ability for users to anonymously make comments on a PR or make follow up commits? one time API token on every push?
