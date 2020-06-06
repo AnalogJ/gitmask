@@ -47,71 +47,89 @@ def handler(event, context):
     owner = event['pathParameters']['org']
     reponame = event['pathParameters']['repo'].replace('.git', '')
 
-    messages.append(git_remote_message('Fork "{0}/{1}" anonymously on github'.format(owner, reponame)))
-    scm_client = Github(GITHUB_API_TOKEN)
-    origin_repo = scm_client.get_repo("{0}/{1}".format(owner, reponame))
-    gitmask_repo = origin_repo.create_fork()
-
     messages.append(git_remote_message('Use git payload to determine which branch has been pushed'))
     headerProto = Protocol(inf.read, lambda *args: None) #noop for output, we can ignore.
     ref, __ignore__ = extract_capabilities(headerProto.read_pkt_line())
     branch = remove_prefix(ref.decode("utf-8") .split(' ')[2], 'refs/heads/')
     messages.append(git_remote_message('Pushed to: "{0}"'.format(branch)))
 
-    with tempfile.TemporaryDirectory(dir='/tmp') as bare_git_repo:
+    scm_client = Github(GITHUB_API_TOKEN)
+    origin_repo = scm_client.get_repo("{0}/{1}".format(owner, reponame))
 
-        messages.append(git_remote_message('Clone the forked repository locally'))
-        authremote = auth_remote_url(GITHUB_API_TOKEN, GITHUB_USER, reponame)
-        repo_clone(authremote, bare_git_repo, True)
-        repo_fetch(bare_git_repo)
+    messages.append(git_remote_message('Validate target branch is valid'))
+    origin_repo.get_branch(branch)
 
-        messages.append(git_remote_message('Apply the git payload to the specified branch'))
-        env = os.environ.copy()
-        # env['GIT_TRACE'] = '1'
-        p = subprocess.Popen(['git-receive-pack', "--stateless-rpc", bare_git_repo], cwd=bare_git_repo, env=env, stdout=subprocess.PIPE,
-                             stdin=subprocess.PIPE)
+    messages.append(git_remote_message('Fork "{0}/{1}" anonymously on github'.format(owner, reponame)))
+    gitmask_repo = origin_repo.create_fork()
 
-        p.stdin.write(body_bytes)
-        p.stdin.flush()
+    response_status_code = 200
+    try:
 
-        for line in p.stdout:
-            outf.write(line)
+        with tempfile.TemporaryDirectory(dir='/tmp') as bare_git_repo:
 
-        with tempfile.TemporaryDirectory(dir='/tmp') as full_git_repo:
-            messages.append(git_remote_message('Creating working-tree'))
+            messages.append(git_remote_message('Clone the forked repository locally'))
+            authremote = auth_remote_url(GITHUB_API_TOKEN, GITHUB_USER, reponame)
+            repo_clone(authremote, bare_git_repo, True)
+            repo_fetch(bare_git_repo)
 
-            repo_clone(bare_git_repo, full_git_repo)
-            repo_remote_add(full_git_repo, 'upstream', authremote)
-            repo_fetch(full_git_repo)
+            messages.append(git_remote_message('Apply the git payload to the specified branch'))
+            env = os.environ.copy()
+            # env['GIT_TRACE'] = '1'
+            p = subprocess.Popen(['git-receive-pack', "--stateless-rpc", bare_git_repo], cwd=bare_git_repo, env=env, stdout=subprocess.PIPE,
+                                 stdin=subprocess.PIPE)
 
-            messages.append(git_remote_message('Squashing commits to an anonymous branch'))
-            anon_local_branch_name = "gitmask-{0}".format(uuid.uuid4())
-            repo_squash_commits(
-                full_git_repo,
-                "upstream/{0}".format(branch), # dest_branch
-                anon_local_branch_name, # squashed_branch
-                'origin/{0}'.format(branch) # packfile_branch
-            )
+            p.stdin.write(body_bytes)
+            p.stdin.flush()
 
-            messages.append(git_remote_message('Pushing anonymous branch up to forked repository'))
-            repo_push(full_git_repo, 'upstream', anon_local_branch_name)
+            for line in p.stdout:
+                outf.write(line)
 
-            messages.append(git_remote_message('Opening a PR against target repository & branch'))
-            pr = origin_repo.create_pull(
-                title="Gitmask Anonymous PR",
-                body="This is an anonymous PR submitted via Gitmask - https://www.gitmask.com",
-                head="{0}:{1}".format(GITHUB_USER, anon_local_branch_name),
-                base=branch
-            )
-            messages.append(git_remote_message('PR URL: {0}'.format(pr.html_url)))
-            messages.append(git_remote_message('Delete forked repository'))
+            with tempfile.TemporaryDirectory(dir='/tmp') as full_git_repo:
+                messages.append(git_remote_message('Creating working-tree'))
+
+                repo_clone(bare_git_repo, full_git_repo)
+                repo_remote_add(full_git_repo, 'upstream', authremote)
+                repo_fetch(full_git_repo)
+
+                messages.append(git_remote_message('Squashing commits to an anonymous branch'))
+                anon_local_branch_name = "gitmask-{0}".format(uuid.uuid4())
+                repo_squash_commits(
+                    full_git_repo,
+                    "upstream/{0}".format(branch), # dest_branch
+                    anon_local_branch_name, # squashed_branch
+                    'origin/{0}'.format(branch) # packfile_branch
+                )
+
+                messages.append(git_remote_message('Pushing anonymous branch up to forked repository'))
+                repo_push(full_git_repo, 'upstream', anon_local_branch_name)
+
+                messages.append(git_remote_message('Opening a PR against target repository & branch'))
+                pr = origin_repo.create_pull(
+                    title="Gitmask Anonymous PR",
+                    body="This is an anonymous PR submitted via Gitmask - https://www.gitmask.com",
+                    head="{0}:{1}".format(GITHUB_USER, anon_local_branch_name),
+                    base=branch
+                )
+                messages.append(git_remote_message('PR URL: {0}'.format(pr.html_url)))
+                messages.append(git_remote_message('Delete forked repository'))
+                gitmask_repo.delete()
+
+
+
+    except:
+        response_status_code = 500
+
+    finally:
+        resp_bytes = inject(outf.getvalue(), '\n'.join(messages).encode('utf-8'))
+
+        messages.append(git_remote_message('error: cleanup forked repository'))
+        try:
             gitmask_repo.delete()
-
-
-    resp_bytes = inject(outf.getvalue(), '\n'.join(messages).encode('utf-8'))
+        except:
+            pass
 
     response = {
-        "statusCode": 200,
+        "statusCode": response_status_code,
         "headers": {'Content-Type': "application/x-git-receive-pack-result"},
         "body": resp_bytes.decode("utf-8")
     }
