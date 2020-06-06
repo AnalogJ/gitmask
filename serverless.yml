@@ -54,7 +54,7 @@ custom:
     master:
       cleanup_enabled: true
       debug: ''
-      api_path: ''
+      api_path: 'v1'
     beta:
       cleanup_enabled: false
       debug: gitmask:*
