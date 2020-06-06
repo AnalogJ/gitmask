@@ -11,7 +11,7 @@
 #
 # Happy Coding!
 
-service: ${env:GITMASK_SERVICE, 'gitmask-api-v2'} # NOTE: update this with your service name
+service: ${env:GITMASK_SERVICE, 'gitmask-api'} # NOTE: update this with your service name
 #app: your-app-name
 #tenant: your-tenant-name
 
@@ -45,7 +45,7 @@ provider:
 
 custom:
   pythonRequirements:
-    dockerizePip: true
+    dockerizePip: non-linux
   apigwBinary:
     types:           #list of mime-types
       - 'application/x-git-receive-pack-request'
