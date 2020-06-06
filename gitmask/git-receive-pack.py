@@ -1,11 +1,7 @@
-from dulwich.protocol import (Protocol, pkt_line, SIDE_BAND_CHANNEL_PROGRESS)
-from dulwich.server import (extract_capabilities, FileSystemBackend, ReceivePackHandler)
 from github import Github
-from gitmask.lib.common.git import (repo_clone, repo_checkout, repo_squash_commits, repo_push, repo_remote_add, repo_fetch)
-from gitmask.lib.common.string import remove_prefix
+from gitmask.lib.common.git import (repo_clone, repo_receive_pack, repo_checkout, repo_squash_commits, repo_push, repo_remote_add, repo_fetch)
 from gitmask.lib.scm.github_utils import auth_remote_url
-from gitmask.lib.gitmask_protocol import inject
-import io
+from gitmask.lib.gitmask_protocol import (inject, decode_branch)
 import tempfile
 import os
 import subprocess
@@ -41,16 +37,13 @@ def handler(event, context):
         body_bytes = base64.decodebytes(event['body'].encode('utf-8'))
     else:
         body_bytes = bytes(event['body'], 'utf-8')
-    inf = io.BytesIO(body_bytes)
-    outf = io.BytesIO()
+
 
     owner = event['pathParameters']['org']
     reponame = event['pathParameters']['repo'].replace('.git', '')
 
     messages.append(git_remote_message('Use git payload to determine which branch has been pushed'))
-    headerProto = Protocol(inf.read, lambda *args: None) #noop for output, we can ignore.
-    ref, __ignore__ = extract_capabilities(headerProto.read_pkt_line())
-    branch = remove_prefix(ref.decode("utf-8") .split(' ')[2], 'refs/heads/')
+    branch = decode_branch(body_bytes)
     messages.append(git_remote_message('Pushed to: "{0}"'.format(branch)))
 
     scm_client = Github(GITHUB_API_TOKEN)
@@ -60,6 +53,7 @@ def handler(event, context):
     try:
         origin_repo.get_branch(branch)
     except:
+        # TODO: wriite a valid error packet/protocol message that can be displayed via the git client UI.
         return {
             "statusCode": 400,
             "headers": {'Content-Type': "application/x-git-receive-pack-result"},
@@ -80,16 +74,7 @@ def handler(event, context):
             repo_fetch(bare_git_repo)
 
             messages.append(git_remote_message('Apply the git payload to the specified branch'))
-            env = os.environ.copy()
-            # env['GIT_TRACE'] = '1'
-            p = subprocess.Popen(['git-receive-pack', "--stateless-rpc", bare_git_repo], cwd=bare_git_repo, env=env, stdout=subprocess.PIPE,
-                                 stdin=subprocess.PIPE)
-
-            p.stdin.write(body_bytes)
-            p.stdin.flush()
-
-            for line in p.stdout:
-                outf.write(line)
+            receive_pack_resp_bytes = repo_receive_pack(bare_git_repo, body_bytes)
 
             with tempfile.TemporaryDirectory(dir='/tmp') as full_git_repo:
                 messages.append(git_remote_message('Creating working-tree'))
@@ -127,7 +112,7 @@ def handler(event, context):
         response_status_code = 500
 
     finally:
-        resp_bytes = inject(outf.getvalue(), '\n'.join(messages).encode('utf-8'))
+        resp_bytes = inject(receive_pack_resp_bytes, '\n'.join(messages).encode('utf-8'))
 
         messages.append(git_remote_message('error: cleanup forked repository'))
         try:

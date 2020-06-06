@@ -1,6 +1,25 @@
 from dulwich.porcelain import (clone, pull, update_head, branch_list, active_branch)
 import subprocess
 import os
+import io
+
+def repo_receive_pack(repo_path, payload_bytes):
+    outf = io.BytesIO()
+
+    env = os.environ.copy()
+    # env['GIT_TRACE'] = '1'
+    p = subprocess.Popen(['git-receive-pack', "--stateless-rpc", repo_path], cwd=repo_path, env=env, stdout=subprocess.PIPE,
+                         stdin=subprocess.PIPE)
+
+    p.stdin.write(payload_bytes)
+    p.stdin.flush()
+
+    # TODO: throw an error if process fails. don't try to continue.
+
+    for line in p.stdout:
+        outf.write(line)
+
+    return outf.getvalue()
 
 def repo_clone(git_remote, repo_path, is_bare=False):
     # '--depth', '1',

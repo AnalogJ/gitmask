@@ -1,6 +1,8 @@
 # inject data into
 import io
+from gitmask.lib.common.string import remove_prefix
 from dulwich.protocol import (Protocol, pkt_line, SIDE_BAND_CHANNEL_PROGRESS)
+from dulwich.server import (extract_capabilities, FileSystemBackend, ReceivePackHandler)
 
 def inject(payload_bytes, inject_bytes):
 
@@ -23,3 +25,10 @@ def inject(payload_bytes, inject_bytes):
 
     # append the new messages to the open payload
     return (payload_bytes + resp_outf.getvalue())
+
+
+def decode_branch(payload_bytes):
+    inf = io.BytesIO(payload_bytes)
+    header_proto = Protocol(inf.read, lambda *args: None) #noop for output, we can ignore.
+    ref, __ignore__ = extract_capabilities(header_proto.read_pkt_line())
+    return remove_prefix(ref.decode("utf-8") .split(' ')[2], 'refs/heads/')
