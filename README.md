@@ -139,3 +139,5 @@ For testing purpose, so on.
 
 You can uninstall the deployment with `sls remove`.
 You have to have the S3 bucket (GITMASK_SERVICE)-(stage)-upload empty in advance.
+
+
