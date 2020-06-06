@@ -1,0 +1,209 @@
+# Welcome to Serverless!
+#
+# This file is the main config file for your service.
+# It's very minimal at this point and uses default values.
+# You can always add more config options for more control.
+# We've included some commented out config examples here.
+# Just uncomment any of them to get that config option.
+#
+# For full config options, check the docs:
+#    docs.serverless.com
+#
+# Happy Coding!
+
+service: ${env:GITMASK_SERVICE, 'gitmask-api-v2'} # NOTE: update this with your service name
+#app: your-app-name
+#tenant: your-tenant-name
+
+# You can pin your service to only deploy with a specific Serverless version
+# Check out our docs for more details
+# frameworkVersion: "=X.X.X"
+
+provider:
+  name: aws
+  runtime: python3.7
+  logRetentionInDays: 60
+  cfLogs: true
+  stage: 'beta'
+  region: us-east-1
+  timeout: 40 # optional, default is 6
+  memorySize: 128
+  environment:
+    GITMASK_SERVICE: ${self:service}
+    DOMAIN: git.gitmask.com
+    DEPLOY_SHA: ${env:CIRCLE_SHA1}
+    STAGE: ${opt:stage, self:provider.stage}
+    GITHUB_USER: ${env:GITHUB_USER, 'unmasked'}
+    GITHUB_API_TOKEN: ${env:UNMASKED_GITMASK_GITHUB_ACCESS_TOKEN, env:GITHUB_API_TOKEN}
+    DEBUG: gitmask:*
+
+  apiGateway:
+    binaryMediaTypes:
+      - 'application/x-git-receive-pack-request'
+      - 'application/x-git-receive-pack-result'
+      - '*/*'
+
+custom:
+  pythonRequirements:
+    dockerizePip: true
+  apigwBinary:
+    types:           #list of mime-types
+      - 'application/x-git-receive-pack-request'
+      - 'application/x-git-receive-pack-result'
+  variables:
+    master:
+      cleanup_enabled: true
+      debug: ''
+      api_path: ''
+    beta:
+      cleanup_enabled: false
+      debug: gitmask:*
+      api_path: 'beta'
+    local:
+      cleanup_enabled: false
+      debug: gitmask:*
+      api_path: 'local'
+  prune:
+    automatic: true
+    number: 2
+
+  customDomain:
+    domainName: git.gitmask.com
+    basePath: ${self:custom.variables.${opt:stage, self:provider.stage}.api_path}
+    stage: ${self:provider.stage}
+    createRoute53Record: false
+    certificateName: '*.gitmask.com'
+
+# you can overwrite defaults here
+#  stage: dev
+#  region: us-east-1
+
+# you can add statements to the Lambda function's IAM Role here
+#  iamRoleStatements:
+#    - Effect: "Allow"
+#      Action:
+#        - "s3:ListBucket"
+#      Resource: { "Fn::Join" : ["", ["arn:aws:s3:::", { "Ref" : "ServerlessDeploymentBucket" } ] ]  }
+#    - Effect: "Allow"
+#      Action:
+#        - "s3:PutObject"
+#      Resource:
+#        Fn::Join:
+#          - ""
+#          - - "arn:aws:s3:::"
+#            - "Ref" : "ServerlessDeploymentBucket"
+#            - "/*"
+
+# you can define service wide environment variables here
+#  environment:
+#    variable1: value1
+
+# you can add packaging information here
+#package:
+#  include:
+#    - include-me.py
+#    - include-me-dir/**
+#  exclude:
+#    - exclude-me.py
+#    - exclude-me-dir/**
+
+functions:
+  version:
+    handler: gitmask/version.handler
+    events:
+      - http:
+          path: version
+          method: get
+          cors: true
+
+  # V2 Backend Methods
+  git-info-refs:
+    handler: gitmask/git-info-refs.handler
+    events:
+      - http:
+          # https://beta.gitmask.com/gh/AnalogJ/capsulecd.git
+          path: gh/{org}/{repo}/info/refs
+          method: get
+          cors: true
+
+  git-receive-pack:
+    handler: gitmask/git-receive-pack.handler
+    layers:
+      - arn:aws:lambda:us-east-1:553035198032:layer:git:11
+    events:
+      - http:
+          # https://beta.gitmask.com/gh/AnalogJ/capsulecd.git
+          path: gh/{org}/{repo}/git-receive-pack
+          method: post
+          cors: true
+#          request:
+#            contentHandling: CONVERT_TO_BINARY
+
+
+#    The following are a few example events you can configure
+#    NOTE: Please make sure to change your handler code to work with those events
+#    Check the event documentation for details
+#    events:
+#      - http:
+#          path: users/create
+#          method: get
+#      - websocket: $connect
+#      - s3: ${env:BUCKET}
+#      - schedule: rate(10 minutes)
+#      - sns: greeter-topic
+#      - stream: arn:aws:dynamodb:region:XXXXXX:table/foo/stream/1970-01-01T00:00:00.000
+#      - alexaSkill: amzn1.ask.skill.xx-xx-xx-xx
+#      - alexaSmartHome: amzn1.ask.skill.xx-xx-xx-xx
+#      - iot:
+#          sql: "SELECT * FROM 'some_topic'"
+#      - cloudwatchEvent:
+#          event:
+#            source:
+#              - "aws.ec2"
+#            detail-type:
+#              - "EC2 Instance State-change Notification"
+#            detail:
+#              state:
+#                - pending
+#      - cloudwatchLog: '/aws/lambda/hello'
+#      - cognitoUserPool:
+#          pool: MyUserPool
+#          trigger: PreSignUp
+
+#    Define function environment variables here
+#    environment:
+#      variable2: value2
+
+# you can add CloudFormation resource templates here
+#resources:
+#  Resources:
+#    NewResource:
+#      Type: AWS::S3::Bucket
+#      Properties:
+#        BucketName: my-new-bucket
+#  Outputs:
+#     NewOutput:
+#       Description: "Description for the output"
+#       Value: "Some output value"
+
+plugins:
+  - serverless-python-requirements
+  - serverless-offline-python
+  - serverless-prune-plugin
+  - serverless-domain-manager
+# you can add packaging information here
+package:
+  #  individually: true # required for https://github.com/FidelLimited/serverless-plugin-optimize
+  # only the following paths will be included in the resulting artifact which will be uploaded. Without specific include everything in the current folder will be included
+  include:
+    - gitmask
+    - functions
+    - opt
+  # The following paths will be excluded from the resulting artifact. If both include and exclude are defined we first apply the include, then the exclude so files are guaranteed to be excluded
+  exclude:
+    - tmp
+    - .git
+    - .idea
+    - no
+    - opt
+    - venv

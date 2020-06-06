@@ -1,0 +1,29 @@
+{
+  "name": "gitmask",
+  "version": "2.0.0",
+  "description": "Gitmask v2 using Python",
+  "main": "handler.py",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AnalogJ/gitmask-v2.git"
+  },
+  "author": "Jason Kulatunga",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/AnalogJ/gitmask-v2/issues"
+  },
+  "homepage": "https://github.com/AnalogJ/gitmask-v2#readme",
+  "dependencies": {
+    "serverless-apigw-binary": "^0.4.4",
+    "serverless-apigwy-binary": "^1.0.0",
+    "serverless-offline-python": "^3.22.2",
+    "serverless-python-requirements": "^5.1.0"
+  },
+  "devDependencies": {
+    "serverless-domain-manager": "^4.1.1",
+    "serverless-prune-plugin": "^1.4.3"
+  }
+}

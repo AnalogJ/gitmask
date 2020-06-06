@@ -3,7 +3,7 @@ jobs:
   build:
     # The primary container is an instance of the first image listed. The job's commands run in this container.
     docker:
-      - image: circleci/node:12.3.1
+      - image: circleci/python:3.7.0-node
     steps:
       - checkout
       - run:
@@ -26,7 +26,7 @@ jobs:
           command: npm ls || true
   test:
     docker:
-      - image: circleci/node:12.3.1
+      - image: circleci/python:3.7.0-node
     steps:
       - checkout
       - restore_cache:
@@ -45,7 +45,7 @@ jobs:
   #          prefix: coverage
   deploy:
     docker:
-      - image: circleci/node:12.3.1
+      - image: circleci/python:3.7.0-node
     steps:
       - checkout
       - run:

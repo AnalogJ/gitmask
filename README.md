@@ -8,6 +8,41 @@
 
 
 
+
+# Contributing
+
+
+```
+pipenv install packge_name
+pipenv run pip freeze > requirements.txt
+
+sls requirements install
+PYTHONPATH=/Users/jason/Library/Caches/serverless-python-requirements/2674a9f8121c5816727ff9f31e4684c72875956b15f0bbb0eb0d69838d6ad47b_slspyc sls offline start
+
+
+```
+
+# Applying test packfile
+```
+ GIT_TRACE=1 GIT_TRACE_PACKFILE=/Users/jason/repos/gitmask/packfile.txt GIT_TRACE_CURL=2 GIT_CURL_VERBOSE=2 git push test beta2
+
+
+cd /tmp/tmp7ci900n2
+git unpack-objects -r < /Users/jason/repos/gitmask/packfile.txt
+
+```
+
+
+# References
+
+- https://janakiev.com/blog/python-shell-commands/
+- https://mincong.io/2018/05/04/git-and-http/
+- https://github.com/qhzhyt/http-git-server
+
+
+
+
+
 # Goals for V2
 
 - ability to use gitmask as a remote, rather than requiring bundles to use it.
