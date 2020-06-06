@@ -46,7 +46,7 @@ git remote add gitmask https://git.gitmask/v1/gh/AnalogJ/gitmask
 git push gitmask feat_branch:master
 
 # Gitmask will strip identifying information from your commits.
-# You should see a link to the pull request that we open.
+# You will be provided with a direct link to the pull request.
 
 ```
 
