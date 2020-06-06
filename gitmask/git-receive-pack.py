@@ -56,8 +56,15 @@ def handler(event, context):
     scm_client = Github(GITHUB_API_TOKEN)
     origin_repo = scm_client.get_repo("{0}/{1}".format(owner, reponame))
 
-    messages.append(git_remote_message('Validate target branch is valid'))
-    origin_repo.get_branch(branch)
+    messages.append(git_remote_message('Validate target branch exists'))
+    try:
+        origin_repo.get_branch(branch)
+    except:
+        return {
+            "statusCode": 400,
+            "headers": {'Content-Type': "application/x-git-receive-pack-result"},
+            "body": 'Branch "{0}" does not exist on target repo "{1}/{2}". Try `git push gitmask local_branch:target_branch`'.format(branch, owner, reponame)
+        }
 
     messages.append(git_remote_message('Fork "{0}/{1}" anonymously on github'.format(owner, reponame)))
     gitmask_repo = origin_repo.create_fork()
