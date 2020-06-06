@@ -31,6 +31,7 @@ module.exports.handler = async (event, context) => {
 
         const res = await writeReceivePackAdResponse({
             service: event.queryStringParameters.service,
+            //https://git-scm.com/docs/protocol-capabilities
             capabilities: [
                 'report-status',
                 'delete-refs',
