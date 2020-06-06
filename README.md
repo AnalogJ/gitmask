@@ -30,7 +30,7 @@ There's a number of reasons why you may want to contribute to a Github project a
 - Government - you may live in a country/region where the government tracks your [contributions online](https://en.wikipedia.org/wiki/Censorship_of_GitHub)
 - Career - you may be contributing to a project that your employer may [not approve of](https://github.com/Cxbx-Reloaded/Cxbx-Reloaded)
 - Security - you may want to contribute to a project that implies [financial interest](https://github.com/bitcoin/bitcoin)
-- Prove a point - you may want to write something [conterv](https://github.com/offapi/rbac-23andme-oauth2) to start a discussion.
+- Prove a point - you may want to write something [controversial](https://github.com/offapi/rbac-23andme-oauth2) to start a discussion.
 - You just value your privacy.
 
 
@@ -63,22 +63,23 @@ Coming Soon
 Gitmask is written as a serverless project, specifically configured for the AWS Lambda Python runtime
 
 You can run it locally by doing the the following:
+
 - Create an AWS account where your gitmask run.
 - Install nodejs, python, serverless-framework and aws-cli.
-    * https://nodejs.org/
-    & https://www.python.org
-    * https://serverless.com/
-    * https://aws.amazon.com/cli/
+    - https://nodejs.org/
+    - https://www.python.org
+    - https://serverless.com/
+    - https://aws.amazon.com/cli/
 - Create and setup the AWS user for the deployment.
-     * Set up the credentials with `aws configure`
-     * You may use the AWS account root user.
-     * You can create a new IAM user with restrict permissions.
-        * https://serverless.com/blog/abcs-of-iam-permissions/ may help you.
+    - Set up the credentials with `aws configure`
+    - You may use the AWS account root user.
+    - You can create a new IAM user with restrict permissions.
+       - https://serverless.com/blog/abcs-of-iam-permissions/ may help you.
 - Issue your github access token
-    * Go to github Settings > Developer settings > Personal access tokens
-    * Run generate new token
-        * scopes
-            * public_repo
+    - Go to github Settings > Developer settings > Personal access tokens
+    - Run generate new token
+       - scopes
+          - public_repo
 
 - Configure following environment variables:
 
@@ -90,7 +91,7 @@ You can run it locally by doing the the following:
     |GITMASK_SERVICE_NORMALIZE|Normalized value for GITMASK_SERVICE,removing special characters and captalize the first letter. e.g. Myowngitmaskapi |
     |CIRCLE_SHA1              |Set the value retrieved by `git rev-parse --short HEAD`|
 
-4. Run deployment
+- Run deployment
 
     ```
     npm install -g serverless
@@ -107,14 +108,14 @@ You can run it locally by doing the the following:
 
 ```
 sls requirements install
-PYTHONPATH=/Users/jason/Library/Caches/serverless-python-requirements/2674a9f8121c5816727ff9f31e4684c72875956b15f0bbb0eb0d69838d6ad47b_slspyc sls offline start
+PYTHONPATH=~/Library/Caches/serverless-python-requirements/2674a9f8121c5816727ff9f31e4684c72875956b15f0bbb0eb0d69838d6ad47b_slspyc sls offline start
 ```
 
 
 
 ## Useful Commands
 - `GIT_TRACE=1 GIT_TRACE_PACKFILE=~/repos/gitmask/packfile.txt GIT_TRACE_CURL=2 GIT_CURL_VERBOSE=2 git push test beta2`
-- `git unpack-objects -r < /Users/jason/repos/gitmask/packfile.txt`
+- `git unpack-objects -r < ~/repos/gitmask/packfile.txt`
 
 
 
