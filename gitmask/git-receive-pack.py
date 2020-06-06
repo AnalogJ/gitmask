@@ -28,7 +28,7 @@ def handler(event, context):
         '     888                                                     ',
         'Y8b d88P                                                     ',
         ' "Y88P"                                                      ',
-        '                       www.gitmask.com                       ',
+        '                  https://www.gitmask.com                    ',
         '#############################################################'
 
     ]
