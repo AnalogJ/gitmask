@@ -56,13 +56,9 @@ jobs:
       - run:
           name: Deploy
           command: |
-            # pushd opt && tar -xvf git-2.4.3.tar && rm -rf git-2.4.3.tar && popd
-            npm prune --production #prune node_modules directory to only contain production modules
 
-            serverless prune -n 4
             serverless create_domain
             serverless deploy --conceal --verbose --stage $CIRCLE_BRANCH --region us-east-1
-            # aws s3api put-bucket-lifecycle-configuration  --bucket gitmask-api-${CIRCLE_BRANCH}-upload --lifecycle-configuration file://bucket.lifecycle.json
       - run:
           name: Create Deployment
           command: |
