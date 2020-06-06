@@ -1,0 +1,95 @@
+version: 2
+jobs:
+  build:
+    # The primary container is an instance of the first image listed. The job's commands run in this container.
+    docker:
+      - image: circleci/python:3.7.0-node
+    steps:
+      - checkout
+      - run:
+          name: Update npm
+          command: 'sudo npm install -g npm@latest'
+      - run:
+          name: Install serverless
+          command: 'sudo npm install -g serverless'
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+      - run:
+          name: Install npm
+          command: npm install
+      - save_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+          paths:
+            - node_modules
+      - run:
+          name: List npm installed packages
+          command: npm ls || true
+  test:
+    docker:
+      - image: circleci/python:3.7.0-node
+    steps:
+      - checkout
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+      - run:
+          name: Test
+          command: npm test
+  #      - run:
+  #          name: Generate code coverage
+  #          command: './node_modules/.bin/nyc report --reporter=text-lcov'
+  #      - store_artifacts:
+  #          path: test-results.xml
+  #          prefix: tests
+  #      - store_artifacts:
+  #          path: coverage
+  #          prefix: coverage
+  deploy:
+    docker:
+      - image: circleci/python:3.7.0-node
+    steps:
+      - checkout
+      - run:
+          name: Install serverless
+          command: 'sudo npm install -g serverless'
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+      - run:
+          name: Deploy
+          command: |
+
+            serverless create_domain
+            serverless deploy --conceal --verbose --stage $CIRCLE_BRANCH --region us-east-1
+      - run:
+          name: Create Deployment
+          command: |
+
+            curl --user "x:${GITHUB_CIRCLECI_DEPLOYMENT_STATUS_TOKEN}" https://api.github.com/repos/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/deployments \
+            -H "Expect:" \
+            -H 'Content-Type: text/json; charset=utf-8' \
+            -d @- << EOF
+              {
+                "ref":"${CIRCLE_SHA1}",
+                "auto_merge":false,
+                "payload":"",
+                "required_contexts": [],
+                "description":"Deploy request from CircleCI",
+                "environment":"${CIRCLE_BRANCH}"
+              }
+            EOF
+
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - build
+      - test:
+          requires:
+            - build
+      - deploy:
+          requires:
+            - test
+          filters:
+            branches:
+              only:
+                - master
+                - beta
