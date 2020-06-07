@@ -107,6 +107,7 @@ def handler(event, context):
                         '',
                         'I help developers protect their privacy, while still contributing to projects they love.',
                         'I do this by **removing identifying information** from their commits, **stripping commit messages** and **squashing** changes.',
+                        '',
                         'While these actions can make it harder for maintainers such as yourself to determine context for this PR, please consider that some of your users may not have the same freedoms that you enjoy.',
                         '',
                         'Gitmask is often a tool used out of necessity.',
