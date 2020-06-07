@@ -103,19 +103,21 @@ def handler(event, context):
                     body='\n'.join([
                         'Hi!',
                         '',
-                        'I\'m a bot for [gitmask.com](https://www.gitmask.com). I help developers protect their privacy, while still contributing to projects they love.',
-                        'I do this by removing identifying information from their commits, stripping commit messages and squashing changes.',
-                        'While these actions can make it harder for maintainers such as yourself to determine context for this PR, please consider that some of your users may not have the same freedoms that you enjoy.',
-                        'Gitmask is more often than not a tool used out of necessity.',
+                        'I\'m a bot for [gitmask.com](https://www.gitmask.com).',
                         '',
-                        'If you are the contributor for this PR, you can go to the following url with your unique access token to comment on this PR anonymously',
+                        'I help developers protect their privacy, while still contributing to projects they love.',
+                        'I do this by **removing identifying information** from their commits, **stripping commit messages** and **squashing** changes.',
+                        'While these actions can make it harder for maintainers such as yourself to determine context for this PR, please consider that some of your users may not have the same freedoms that you enjoy.',
+                        '',
+                        'Gitmask is often a tool used out of necessity.',
+                        '',
+                        'If you are the contributor for this PR, you can go to the following url with your unique access token to respond to & comment on this PR anonymously',
                         '',
                         '[![Gitmask Messaging](https://img.shields.io/badge/Private%20Comment-%E2%96%BA-blue.svg)](https://www.gitmask.com/comment)',
                         '',
                         '---',
                         '',
-                        'If you\'re interested in learning more about Gitmask, you can check it out [here](https://www.gitmask.com)'
-
+                        'If you\'re interested in learning more about Gitmask, you can check it out [here](https://www.gitmask.com).'
                     ])
                 )
                 messages.append(git_remote_message('PR URL: {0}'.format(pr.html_url)))
