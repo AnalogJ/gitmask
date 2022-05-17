@@ -11,12 +11,12 @@ Contribute Code Anonymously
 # Introduction
 
 Gitmask is an open source hosted service that allows you to contribute to Github projects anonymously.
-It mimics a standard `git remote`, however all identifying information (author names, email and timestamps) embedded in
+It mimicks a standard `git remote`, however all identifying information (author names, email and timestamps) embedded in
 your commits are stripped, before forwarding a squashed commit to the target repository as a pull request.
 
 # Features
 - Does not require a Github account - Gitmask is completely anonymous
-- Mimic's a standard git remote, allowing you to keep your normal development workflow and tools.
+- Mimicks a standard git remote, allowing you to keep your normal development workflow and tools.
 - Automatically creates a pull request against target repository & branch
 - Hosted Open Source project. Use gitmask.com or run it yourself if you're privacy conscious.
 - Inline progress logs
@@ -64,7 +64,7 @@ Gitmask is written as a serverless project, specifically configured for the AWS 
 
 You can run it locally by doing the the following:
 
-- Create an AWS account where your gitmask run.
+- Create an AWS account where your gitmask runs.
 - Install nodejs, python, serverless-framework and aws-cli.
     - https://nodejs.org/
     - https://www.python.org
